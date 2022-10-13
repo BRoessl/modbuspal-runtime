@@ -44,7 +44,7 @@ import org.xml.sax.SAXException;
  * 
  * @author nnovic
  */
-public class ModbusPalPane extends JPanel
+public class ModbusPalPane
 		implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener {
 	/** Name and version of this application */
 	public static final String APP_STRING = "ModbusPal 1.6c";
@@ -154,12 +154,6 @@ public class ModbusPalPane extends JPanel
 
 		notifyModbusPalProjectChanged(old, modbusPalProject);
 
-		// - - - - - - - - - - -
-		// Refresh Display
-		// - - - - - - - - - - -
-
-		validate();
-		repaint();
 	}
 
 	private void notifyModbusPalProjectChanged(ModbusPalProject oldProject, ModbusPalProject newProject) {
@@ -230,6 +224,7 @@ public class ModbusPalPane extends JPanel
 				for (Automation automation : automations) {
 					automation.start();
 				}
+				ModbusPalRecorder.start();
 				startLink();
 			} catch (Exception exception) {
 				System.out.println(
@@ -361,8 +356,6 @@ public class ModbusPalPane extends JPanel
 		stopAllAutomationsButton = new javax.swing.JButton();
 		automationListScrollPane = new javax.swing.JScrollPane();
 		automationsListPanel = new javax.swing.JPanel();
-
-		setLayout(new java.awt.BorderLayout());
 
 		settingsPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -594,8 +587,6 @@ public class ModbusPalPane extends JPanel
 		gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 		settingsPanel.add(toolsPanel, gridBagConstraints);
 
-		add(settingsPanel, java.awt.BorderLayout.NORTH);
-
 		jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
 		slavesListView.setBorder(javax.swing.BorderFactory.createTitledBorder("Modbus slaves"));
@@ -682,7 +673,6 @@ public class ModbusPalPane extends JPanel
 
 		jSplitPane1.setRightComponent(jPanel3);
 
-		add(jSplitPane1, java.awt.BorderLayout.CENTER);
 	}// </editor-fold>//GEN-END:initComponents
 
 	private void startTcpIpLink(boolean isMaster) {
@@ -897,7 +887,6 @@ public class ModbusPalPane extends JPanel
 		Thread saver = new Thread(loadTask);
 		saver.setName("saver");
 		saver.start();
-		GUITools.align(this, dialog);
 		dialog.setVisible(true);
 		/*
 		 * try { saveProject(modbusPalProject.projectFile); // TODO:
@@ -964,7 +953,6 @@ public class ModbusPalPane extends JPanel
 		Thread loader = new Thread(loadTask);
 		loader.setName("loader");
 		loader.start();
-		GUITools.align(this, dialog);
 		dialog.setVisible(true);
 	}// GEN-LAST:event_loadButtonActionPerformed
 
@@ -1105,7 +1093,6 @@ public class ModbusPalPane extends JPanel
 	private void consoleToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_consoleToggleButtonActionPerformed
 
 		if (consoleToggleButton.isSelected() == true) {
-			GUITools.align(this, console);
 			console.setVisible(true);
 		} else {
 			console.setVisible(false);
@@ -1132,7 +1119,7 @@ public class ModbusPalPane extends JPanel
 
 	private File chooseRecordFile() {
 		XFileChooser fc = new XFileChooser(XFileChooser.RECORDER_FILE);
-		fc.showOpenDialog(this);
+		fc.showOpenDialog(null);
 		File src = fc.getSelectedFile();
 		modbusPalProject.linkReplayFile = src;
 		setReplayFile(src);

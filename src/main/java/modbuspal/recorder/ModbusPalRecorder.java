@@ -8,6 +8,8 @@ package modbuspal.recorder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +65,7 @@ public class ModbusPalRecorder
 	// private PipedInputStream input;
 	// private PipedOutputStream output;
 	// private boolean running;
-	private FileWriter fileWriter = null;
+	private OutputStreamWriter fileWriter = null;
 
 	ModbusPalRecorder() {
 		// output = new PipedOutputStream();
@@ -72,7 +74,7 @@ public class ModbusPalRecorder
 		// thread.start();
 	}
 
-	private synchronized void setOutput(FileWriter writer) throws IOException {
+	private synchronized void setOutput(OutputStreamWriter writer) throws IOException {
 		if (fileWriter != null) {
 			fileWriter.flush();
 			fileWriter.close();
@@ -115,13 +117,13 @@ public class ModbusPalRecorder
 	 * @throws IOException
 	 */
 	public static void start() throws IOException {
-		XFileChooser fc = new XFileChooser(XFileChooser.RECORDER_FILE);
-		fc.showSaveDialog(null);
-		File destFile = fc.getSelectedFile();
-		if (destFile != null) {
-			System.out.println("recording into " + destFile.getPath());
-			uniqInst.setOutput(new FileWriter(destFile));
-		}
+//		XFileChooser fc = new XFileChooser(XFileChooser.RECORDER_FILE);
+//		fc.showSaveDialog(null);
+//		File destFile = fc.getSelectedFile();
+//		if (destFile != null) {
+			System.out.println("recording to console");
+			uniqInst.setOutput(new OutputStreamWriter(System.out));
+//		}
 	}
 
 	/**
@@ -148,6 +150,7 @@ public class ModbusPalRecorder
 		if (fileWriter != null) {
 			try {
 				fileWriter.write(open + hexa + close);
+				fileWriter.flush();
 			} catch (IOException ex) {
 				Logger.getLogger(ModbusPalRecorder.class.getName()).log(Level.SEVERE, null, ex);
 			}
