@@ -86,7 +86,6 @@ public class AutomationEditor extends javax.swing.JDialog
 
 		// try to install the ChartPanel
 		if (ModbusPalPane.verifyJFreeChart() == true) {
-			chartPanel = new AutomationChart(a);
 			jPanel1.add("chart", chartPanel);
 		} else {
 			chartPanel = null;

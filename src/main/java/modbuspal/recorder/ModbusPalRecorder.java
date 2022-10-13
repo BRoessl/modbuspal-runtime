@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -140,9 +141,9 @@ public class ModbusPalRecorder
 		if (start == null) {
 			start = now;
 		}
-		long timestamp = now.getTime() - start.getTime();
+		String timestamp = LocalDateTime.now().toString();
 
-		String open = String.format("<%s timestamp=%d slave=%s>", tag, timestamp, slaveID.toString());
+		String open = String.format("<%s timestamp=%s slave=%s>", tag, timestamp, slaveID.toString());
 		String hexa = HexaTools.toHexa(buffer, offset, pduLength);
 		String close = String.format("</%s>\r\n", tag);
 
