@@ -587,9 +587,7 @@ public final class ModbusSlave implements ModbusPalXML, ModbusConst {
 					}
 
 					slaveId = msa.get(0);
-					if (slaveId == null) {
-						slaveId = new ModbusSlaveAddress(InetAddress.getByName(id));
-					}
+
 				} catch (UnknownHostException exception) {
 					System.out.println("Unknown host while loading Modbus Slave: " + id);
 				}

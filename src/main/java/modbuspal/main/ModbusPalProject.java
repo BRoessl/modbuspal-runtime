@@ -185,8 +185,7 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 			// If already exists:
 			if (automation != null) {
 				// display a dialog and ask the user what to do:
-				System.out.println("An automation called \"" + name
-						+ "\" already exists. Overwriting...");
+				System.out.println("An automation called \"" + name + "\" already exists. Overwriting...");
 
 				// otherwise, replace the content of the existing automation
 				// with the new settings:
@@ -321,11 +320,20 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 				slave = getModbusSlave(msa);
 			} else {
 				slaveAddress = XMLTools.getAttribute(ModbusPalXML.XML_SLAVE_ID_ATTRIBUTE, parentSlave);
+
 				try {
-					ModbusSlaveAddress msa = new ModbusSlaveAddress(InetAddress.getByName(slaveAddress));
-					slave = getModbusSlave(msa);
+
+					List<ModbusSlaveAddress> msa = AddSlaveUtil.tryParseRtuAddress(slaveAddress);
+					if (msa == null) {
+						msa = AddSlaveUtil.tryParseIpAddress_2(slaveAddress);
+						if (msa == null) {
+							msa = AddSlaveUtil.tryParseIpAddress_1(slaveAddress);
+						}
+					}
+
+					slave = getModbusSlave(msa.get(0));
 				} catch (UnknownHostException exception) {
-					System.out.println("Unable to get Modbus Slave IP address from slave address: " + slaveAddress);
+					System.out.println("Unknown host while loading Modbus Slave: " + slaveAddress);
 				}
 			}
 		}
@@ -621,7 +629,6 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 		return name;
 	}
 
-
 	// ==========================================================================
 	//
 	// GENERATORS
@@ -869,7 +876,6 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 			return retval;
 		}
 	}
-
 
 	/**
 	 * Removes the specified MODBUS slave from the project.
