@@ -223,52 +223,20 @@ public class ModbusPalPane extends JPanel
 				System.out.println("Loading the project file: " + initialLoadProjectFilePath);
 				project = loadProject(initialLoadProjectFilePath);
 
-				// Need to initialize the port number after loading the project, and not every
-				// time we load or set a project because if the
-				// user wants to load another file, we don't want to clobber it with the command
-				// line initial port number.
-				// This call must be called before the runToggleButton.doClick() method is
-				// invoked.
-				initializeInitialPortNumber(project);
-
 				// Now that we have loaded a project from an initial project file, it is time to
 				// start all of the
-				// automations that have been loaded from the project file.
-				Component panels[] = automationsListPanel.getComponents();
-				for (int panelIndex = 0; panelIndex < panels.length; panelIndex++) {
-					if (panels[panelIndex] instanceof AutomationPanel) {
-						AutomationPanel panel = (AutomationPanel) panels[panelIndex];
-						panel.automationHasStarted(null);
-					}
+				// automations that have been loaded from the project file.			
+				Automation[] automations = project.getAutomations();
+				for (Automation automation : automations) {
+					automation.start();
 				}
-				runToggleButton.doClick();
+				startLink();
 			} catch (Exception exception) {
 				System.out.println(
 						"Could not load the initial project file path \"" + initialLoadProjectFilePath + "\".");
 				System.out.println("Check the path you inputted into the command line arguments.");
 			}
-		} else {
-			project = new ModbusPalProject();
-			setProject(project);
-			// Initializing the initial port number in case a port number was given, but no
-			// initial load file was given in the
-			// command line arguments.
-			initializeInitialPortNumber(project);
 		}
-	}
-
-	/**
-	 * Initialize the initial port number given from the command line arguments if
-	 * there was a valid number given in the command line.
-	 * 
-	 * @param project The current ModbusPal project that is being used.
-	 */
-	private void initializeInitialPortNumber(ModbusPalProject project) {
-		int initialPortNumber = ModbusPalGui.getInitialPortNumber();
-		if (initialPortNumber >= 0 && initialPortNumber <= ModbusPalGui.MAX_PORT_NUMBER) {
-			project.linkTcpipPort = Integer.toString(initialPortNumber);
-		}
-		portTextField.setText(project.linkTcpipPort);
 	}
 
 	private void installConsole() {
@@ -408,14 +376,8 @@ public class ModbusPalPane extends JPanel
 		gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 2);
 		tcpIpSettingsPanel.add(jLabel1, gridBagConstraints);
 
-		int initialPortNumber = ModbusPalGui.getInitialPortNumber();
-		if (initialPortNumber >= 0 && initialPortNumber <= ModbusPalGui.MAX_PORT_NUMBER) {
-			System.out.println("Loading the initial TCP/IP port number: " + initialPortNumber);
-			portTextField.setText(Integer.toString(initialPortNumber));
-		} else {
-			System.out.println("Could not load an initial port number. Loading default port number.");
-			portTextField.setText(DEFAULT_PORT_TEXT);
-		}
+		portTextField.setText(DEFAULT_PORT_TEXT);
+
 		portTextField.setPreferredSize(new java.awt.Dimension(40, 20));
 
 		gridBagConstraints = new java.awt.GridBagConstraints();
