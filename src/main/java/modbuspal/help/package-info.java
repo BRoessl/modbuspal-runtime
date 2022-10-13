@@ -7,4 +7,3 @@
  * Contains the HTML help for the application and a basic viewer.
  */
 package modbuspal.help;
-

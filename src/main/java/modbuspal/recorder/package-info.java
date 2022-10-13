@@ -4,8 +4,7 @@
  */
 
 /**
- * Records a MODBUS session (requests and replies) in order to replay the
- * same session again later.
+ * Records a MODBUS session (requests and replies) in order to replay the same
+ * session again later.
  */
 package modbuspal.recorder;
-

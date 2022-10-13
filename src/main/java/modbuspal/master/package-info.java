@@ -7,4 +7,3 @@
  * Classes that define a modbus master
  */
 package modbuspal.master;
-

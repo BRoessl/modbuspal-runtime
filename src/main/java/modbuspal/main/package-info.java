@@ -8,4 +8,3 @@
  * interactions).
  */
 package modbuspal.main;
-

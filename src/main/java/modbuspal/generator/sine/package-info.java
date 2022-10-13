@@ -7,4 +7,3 @@
  * Defines the sine generator for automations.
  */
 package modbuspal.generator.sine;
-

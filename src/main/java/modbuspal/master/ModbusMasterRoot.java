@@ -10,13 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author JMC15
  */
-public class ModbusMasterRoot
-extends DefaultMutableTreeNode
-{
-    public ModbusMasterRoot()
-    {
-        setUserObject("Tasks");
-    }
-    
-    
+public class ModbusMasterRoot extends DefaultMutableTreeNode {
+	public ModbusMasterRoot() {
+		setUserObject("Tasks");
+	}
+
 }

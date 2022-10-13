@@ -19,174 +19,139 @@ import modbuspal.toolkit.ModbusTools;
 
 /**
  * Processes an incoming tcp/ip connection received by the ModbusTcpIpLink
+ * 
  * @author nnovic
  */
-public class ModbusTcpIpSlaveDispatcher
-extends ModbusSlaveProcessor
-implements Runnable
-{
+public class ModbusTcpIpSlaveDispatcher extends ModbusSlaveProcessor implements Runnable {
 
+	private static ArrayList<ModbusTcpIpSlaveDispatcher> dispatchers = new ArrayList<ModbusTcpIpSlaveDispatcher>();
 
+	private static void register(ModbusTcpIpSlaveDispatcher dispatcher) {
+		if (dispatchers.contains(dispatcher) == false) {
+			dispatchers.add(dispatcher);
+		}
+	}
 
-    private static ArrayList<ModbusTcpIpSlaveDispatcher> dispatchers = new ArrayList<ModbusTcpIpSlaveDispatcher>();
+	private static void unregister(ModbusTcpIpSlaveDispatcher dispatcher) {
+		if (dispatchers.contains(dispatcher) == true) {
+			dispatchers.remove(dispatcher);
+		}
+	}
 
-    private static void register(ModbusTcpIpSlaveDispatcher dispatcher)
-    {
-        if( dispatchers.contains(dispatcher)==false )
-        {
-            dispatchers.add(dispatcher);
-        }
-    }
+	static void stopAll() {
+		Iterator<ModbusTcpIpSlaveDispatcher> iter = dispatchers.iterator();
+		while (iter.hasNext()) {
+			ModbusTcpIpSlaveDispatcher dispatcher = iter.next();
+			dispatcher.stop();
+		}
+	}
 
-    private static void unregister(ModbusTcpIpSlaveDispatcher dispatcher)
-    {
-        if( dispatchers.contains(dispatcher)==true )
-        {
-            dispatchers.remove(dispatcher);
-        }
-    }
+	private Thread slaveThread;
+	private Socket slaveSocket;
+	private InputStream slaveInput;
+	private OutputStream slaveOutput;
 
-    static void stopAll()
-    {
-        Iterator<ModbusTcpIpSlaveDispatcher> iter = dispatchers.iterator();
-        while( iter.hasNext() )
-        {
-            ModbusTcpIpSlaveDispatcher dispatcher = iter.next();
-            dispatcher.stop();
-        }
-    }
+	/**
+	 * Creates a new instance of ModbusTcpIpSlaveDispatcher
+	 * 
+	 * @param mpp  the modbuspal project that holds MODBUS slaves information
+	 * @param sock the socket to use to communicate with the master
+	 * @throws IOException
+	 */
+	public ModbusTcpIpSlaveDispatcher(ModbusPalProject mpp, Socket sock) throws IOException {
+		super(mpp);
+		slaveSocket = sock;
+		slaveInput = sock.getInputStream();
+		slaveOutput = sock.getOutputStream();
+	}
 
+	/**
+	 * starts the thread that processes the incoming requests
+	 */
+	public void start() {
+		slaveThread = new Thread(this, "tcp/ip dispatcher");
+		slaveThread.start();
+	}
 
-    private Thread slaveThread;
-    private Socket slaveSocket;
-    private InputStream slaveInput;
-    private OutputStream slaveOutput;
+	/**
+	 * stops the thread that processes the incoming requests
+	 */
+	public void stop() {
+		try {
+			slaveInput.close();
+			slaveOutput.close();
+			slaveThread = null;
+		} catch (IOException ex) {
+			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
-    /**
-     * Creates a new instance of ModbusTcpIpSlaveDispatcher
-     * @param mpp the modbuspal project that holds MODBUS slaves information
-     * @param sock the socket to use to communicate with the master
-     * @throws IOException 
-     */
-    public ModbusTcpIpSlaveDispatcher(ModbusPalProject mpp, Socket sock)
-    throws IOException
-    {
-        super(mpp);
-        slaveSocket = sock;
-        slaveInput = sock.getInputStream();
-        slaveOutput = sock.getOutputStream();
-    }
+	@Override
+	public void run() {
+		System.out.println("Start ModubsTcpIpSlaveDispatcher");
+		register(this);
 
-    /**
-     * starts the thread that processes the incoming requests
-     */
-    public void start()
-    {
-        slaveThread = new Thread(this,"tcp/ip dispatcher");
-        slaveThread.start();
-    }
+		int recv = 0;
+		byte[] buffer = new byte[2048];
 
-    /**
-     * stops the thread that processes  the incoming requests
-     */
-    public void stop()
-    {
-        try 
-        {
-            slaveInput.close();
-            slaveOutput.close();
-            slaveThread = null;
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+		try {
+			while (recv != -1) {
+				// read MBAP header:
+				recv = slaveInput.read(buffer, 0, 7);
+				if (recv == -1) {
+					continue;
+				} else if (recv != 7) {
+					throw new IOException();
+				}
 
-    @Override
-    public void run()
-    {
-        System.out.println("Start ModubsTcpIpSlaveDispatcher");
-        register(this);
-        
-        int recv = 0;
-        byte[] buffer = new byte[2048];
+				// interpret MBAP header:
+				int transactionIdentifier = ModbusTools.getUint16(buffer, 0);
+				int protocolIdentifier = ModbusTools.getUint16(buffer, 2);
+				int length = ModbusTools.getUint16(buffer, 4);
+				int uID = ModbusTools.getUint8(buffer, 6);
+				// System.out.println("tID="+transactionIdentifier+" pID="+protocolIdentifier+"
+				// L="+length+" uID="+uID);
 
-        try
-        {
-            while( recv != -1 )
-            {
-                // read MBAP header:
-                recv = slaveInput.read(buffer,0,7);
-                if( recv == -1 )
-                {
-                    continue;
-                }
-                else if( recv != 7 )
-                {
-                    throw new IOException();
-                }
+				// receive PDU
+				int pduLength = length - 1;
+				recv = slaveInput.read(buffer, 7, pduLength);
+				if (recv == -1) {
+					continue;
+				} else if (recv != pduLength) {
+					throw new IOException("received " + recv + " bytes instead of " + pduLength);
+				}
 
-                // interpret MBAP header:
-                int transactionIdentifier = ModbusTools.getUint16(buffer,0);
-                int protocolIdentifier = ModbusTools.getUint16(buffer,2);
-                int length = ModbusTools.getUint16(buffer,4);
-                int uID = ModbusTools.getUint8(buffer,6);
-                //System.out.println("tID="+transactionIdentifier+" pID="+protocolIdentifier+" L="+length+" uID="+uID);
+				// interpret PDU and get result:
+				pduLength = processPDU(new ModbusSlaveAddress(slaveSocket.getInetAddress(), uID), buffer, 7, pduLength);
 
-                // receive PDU
-                int pduLength = length - 1;
-                recv = slaveInput.read(buffer, 7, pduLength);
-                if( recv == -1 )
-                {
-                    continue;
-                }
-                else if( recv != pduLength )
-                {
-                    throw new IOException("received "+recv+" bytes instead of "+pduLength);
-                }
+				if (pduLength > 0) {
+					// change length in MBAP
+					ModbusTools.setUint16(buffer, 4, pduLength + 1);
 
-                // interpret PDU and get result:
-                pduLength = processPDU( new ModbusSlaveAddress(slaveSocket.getInetAddress(), uID), buffer, 7, pduLength);
+					// send all
+					slaveOutput.write(buffer, 0, 7 + pduLength);
+					slaveOutput.flush();
+				}
+			}
+		} catch (IOException ex) {
+			System.err.println("ModubsTcpIpSlaveDispatcher exception " + ex.getMessage());
+		}
 
-                if( pduLength > 0 )
-                {
-                    // change length in MBAP
-                    ModbusTools.setUint16(buffer,4,pduLength+1);
+		// close input stream before exiting
+		try {
+			slaveInput.close();
+		} catch (IOException ex) {
+			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			// close output stream before exiting
+			slaveOutput.close();
+		} catch (IOException ex) {
+			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-                    // send all
-                    slaveOutput.write(buffer,0, 7+pduLength);
-                    slaveOutput.flush();
-                }
-            }
-        }
-        catch(IOException ex)
-        {
-            System.err.println("ModubsTcpIpSlaveDispatcher exception " +ex.getMessage() );
-        }
-
-        // close input stream before exiting
-        try 
-        {
-            slaveInput.close();
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try
-        {
-            // close output stream before exiting
-            slaveOutput.close();
-        } 
-        catch (IOException ex)
-        {
-            Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        System.out.println("Stop ModubsTcpIpSlaveDispatcher");
-        unregister(this);
-    }
-
+		System.out.println("Stop ModubsTcpIpSlaveDispatcher");
+		unregister(this);
+	}
 
 }

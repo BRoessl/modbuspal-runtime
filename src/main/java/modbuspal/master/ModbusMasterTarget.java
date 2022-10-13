@@ -15,43 +15,35 @@ import modbuspal.slave.ModbusSlaveAddress;
  *
  * @author JMC15
  */
-public class ModbusMasterTarget
-extends DefaultMutableTreeNode
-{
-    private String targetName;
-    private ModbusSlaveAddress[] targetList;
-    private String targetListText;
-    
-    void setTargetName(String s) 
-    {
-        targetName = s;
-        setUserObject(targetName);
-    }
+public class ModbusMasterTarget extends DefaultMutableTreeNode {
+	private String targetName;
+	private ModbusSlaveAddress[] targetList;
+	private String targetListText;
 
-    public String getTargetName()
-    {
-        return targetName;
-    }
-    
-    void setTargetList(ModbusSlaveAddress[] a) 
-    {
-        targetList = a;
-    }
-    
-    public List<ModbusSlaveAddress> getTargetList()
-    {
-        ArrayList<ModbusSlaveAddress> output = new ArrayList<ModbusSlaveAddress>();
-        Collections.addAll(output, targetList);
-        return output;
-    }
+	void setTargetName(String s) {
+		targetName = s;
+		setUserObject(targetName);
+	}
 
-    void setTargetListAsText(String targetsAsString) 
-    {
-        targetListText = targetsAsString;
-    }
-    
-    public String getTargetListAsText()
-    {
-        return targetListText;
-    }
+	public String getTargetName() {
+		return targetName;
+	}
+
+	void setTargetList(ModbusSlaveAddress[] a) {
+		targetList = a;
+	}
+
+	public List<ModbusSlaveAddress> getTargetList() {
+		ArrayList<ModbusSlaveAddress> output = new ArrayList<ModbusSlaveAddress>();
+		Collections.addAll(output, targetList);
+		return output;
+	}
+
+	void setTargetListAsText(String targetsAsString) {
+		targetListText = targetsAsString;
+	}
+
+	public String getTargetListAsText() {
+		return targetListText;
+	}
 }
