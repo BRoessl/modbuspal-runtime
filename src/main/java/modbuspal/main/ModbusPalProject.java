@@ -469,8 +469,7 @@ implements ModbusPalXML
     {
         StringBuilder openTag = new StringBuilder("<links ");
 
-        // fill "current" with "tcpip" or "serial" depending on the
-        // currently selected tab
+        // fill "current" with "tcpip" 
         openTag.append("selected=\"").append(selectedLink).append("\" ");
 
         // terminate open openTag and write it

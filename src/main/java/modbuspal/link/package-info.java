@@ -4,7 +4,7 @@
  */
 
 /**
- * Contains the classes that manage the TCP/IP and serial link, and the modbus
+ * Contains the classes that manage the TCP/IP link, and the modbus
  * request interpreter.
  */
 package modbuspal.link;

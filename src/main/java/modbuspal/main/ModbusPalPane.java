@@ -414,8 +414,6 @@ implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener
         tcpIpSettingsPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         portTextField = new NumericTextField();
-        jPanel1 = new javax.swing.JPanel();
-        serialSettingsPanel = new javax.swing.JPanel();
         comPortComboBox = new javax.swing.JComboBox();
         baudRateComboBox = new javax.swing.JComboBox();
         parityComboBox = new javax.swing.JComboBox();
@@ -423,7 +421,6 @@ implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener
         rtsctsCheckBox = new javax.swing.JCheckBox();
         stopBitsComboBox = new javax.swing.JComboBox();
         jPanel5 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         replaySettingsPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -492,81 +489,6 @@ implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener
         tcpIpSettingsPanel.add(portTextField, gridBagConstraints);
 
         linksTabbedPane.addTab("TCP/IP", tcpIpSettingsPanel);
-
-        jPanel1.setLayout(new java.awt.CardLayout());
-
-        serialSettingsPanel.setLayout(new java.awt.GridBagLayout());
-
-        comPortComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 2, 2);
-        serialSettingsPanel.add(comPortComboBox, gridBagConstraints);
-
-        baudRateComboBox.setEditable(true);
-        baudRateComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "115200", "57600", "19200", "9600" }));
-        baudRateComboBox.setSelectedIndex(2);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 2, 5);
-        serialSettingsPanel.add(baudRateComboBox, gridBagConstraints);
-
-        parityComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No parity", "Odd parity", "Even parity" }));
-        parityComboBox.setSelectedIndex(2);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 2, 2);
-        serialSettingsPanel.add(parityComboBox, gridBagConstraints);
-
-        xonxoffCheckBox.setText("XON/XOFF");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 5, 5, 2);
-        serialSettingsPanel.add(xonxoffCheckBox, gridBagConstraints);
-
-        rtsctsCheckBox.setText("RTS/CTS");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 5, 5);
-        serialSettingsPanel.add(rtsctsCheckBox, gridBagConstraints);
-
-        stopBitsComboBox.setEditable(true);
-        stopBitsComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1 stop bit", "1.5 stop bits", "2 stop bits" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 2, 2, 5);
-        serialSettingsPanel.add(stopBitsComboBox, gridBagConstraints);
-
-        jPanel1.add(serialSettingsPanel, "enabled");
-
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-
-        jLabel3.setText("Serial communication is disabled.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jLabel3, gridBagConstraints);
-
-        jButton1.setText("Why?");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel5.add(jButton1, gridBagConstraints);
-
-        jPanel1.add(jPanel5, "disabled");
-
-        linksTabbedPane.addTab("Serial", jPanel1);
 
         replaySettingsPanel.setLayout(new java.awt.GridBagLayout());
 
@@ -1462,8 +1384,6 @@ implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1485,7 +1405,6 @@ implements ModbusPalXML, WindowListener, ModbusPalListener, ModbusLinkListener
     private javax.swing.JToggleButton runToggleButton;
     private javax.swing.JButton saveProjectAsButton;
     private javax.swing.JButton saveProjectButton;
-    private javax.swing.JPanel serialSettingsPanel;
     private javax.swing.JPanel settingsPanel;
     private javax.swing.JScrollPane slaveListScrollPane;
     private javax.swing.JPanel slavesListPanel;

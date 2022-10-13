@@ -82,37 +82,7 @@ public class GUITools
         }
         return null;
     }
-
-
-    /**
-     * Displays a dialog warning the user that a required file was not found
-     * at the excepted location. The user has the possibility to ignore the
-     * warning, or to open a FileChooser to locate the file manually.
-     * @param parent the parent of the dialogs
-     * @param f the missing file
-     * @return the replacement file selected by the user, or null.
-     */
-    public static File promptUserFileNotFound(Component parent, File f)
-    {
-        ErrorMessage msg = new ErrorMessage(2);
-        msg.setTitle("Script not found");
-        msg.append("The following file was not found:\r\n");
-        msg.append(f.getPath()+"\r\n");
-        msg.append("Use 'Browse' to select its new location or 'Abort' to skip loading this script.\r\n");
-        msg.setButton(0, "Browse");
-        msg.setButton(1, "Abort");
-        msg.setVisible(true);
-
-        if( msg.getButton()==0 )
-        {
-            JFileChooser fc = new JFileChooser( f.getParent() );
-            fc.showDialog(parent, "Locate "+f.getName() );
-            return fc.getSelectedFile();
-        }
-
-        return null;
-    }
-    
+   
     
     
     public static void underline(JLabel label)

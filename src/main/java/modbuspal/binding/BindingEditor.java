@@ -183,7 +183,6 @@ extends javax.swing.JDialog
         buttonsPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         orderComboBox = new javax.swing.JComboBox();
-        scriptedBindingsButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
         summaryPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -297,7 +296,6 @@ extends javax.swing.JDialog
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton okButton;
     private javax.swing.JComboBox orderComboBox;
-    private javax.swing.JButton scriptedBindingsButton;
     private javax.swing.JPanel summaryPanel;
     // End of variables declaration//GEN-END:variables
 
