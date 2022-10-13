@@ -10,7 +10,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jfreechart.version>1.0.19</jfreechart.version>
 	</properties>
 
 	<dependencies>
