@@ -35,7 +35,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>modbuspal.main.ModbusPalGui</mainClass>
+							<mainClass>modbuspal.main.ModbusPalProjectRunner</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -54,7 +54,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										modbuspal.main.ModbusPalGui
+										modbuspal.main.ModbusPalProjectRunner
 									</mainClass>
 								</manifest>
 							</archive>
