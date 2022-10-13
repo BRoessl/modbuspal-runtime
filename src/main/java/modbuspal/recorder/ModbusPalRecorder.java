@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,7 +144,7 @@ public class ModbusPalRecorder
 		if (start == null) {
 			start = now;
 		}
-		String timestamp = LocalDateTime.now().toString();
+		String timestamp = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss.SSS"));
 
 		String open = String.format("<%s timestamp=%s slave=%s>", tag, timestamp, slaveID.toString());
 		String hexa = HexaTools.toHexa(buffer, offset, pduLength);

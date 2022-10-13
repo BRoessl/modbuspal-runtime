@@ -131,9 +131,9 @@ public class ModbusPalPane
 		// - - - - - - - - - - - - - -
 
 		slavesListPanel.removeAll();
-		for (ModbusSlave s : project.getModbusSlaves()) {
-			modbusSlaveAdded(s);
-		}
+//		for (ModbusSlave s : project.getModbusSlaves()) {
+//			modbusSlaveAdded(s);
+//		}
 
 		// - - - - - - - - - - - - - -
 		// Refresh list of automations
@@ -227,6 +227,7 @@ public class ModbusPalPane
 				ModbusPalRecorder.start();
 				startLink();
 			} catch (Exception exception) {
+				exception.printStackTrace();
 				System.out.println(
 						"Could not load the initial project file path \"" + initialLoadProjectFilePath + "\".");
 				System.out.println("Check the path you inputted into the command line arguments.");
