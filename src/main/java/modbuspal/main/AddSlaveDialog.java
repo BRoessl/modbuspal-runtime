@@ -81,7 +81,7 @@ public class AddSlaveDialog extends javax.swing.JDialog {
 		return added;
 	}
 
-	private List<ModbusSlaveAddress> tryParseRtuAddress(String s) {
+	public static List<ModbusSlaveAddress> tryParseRtuAddress(String s) {
 		Pattern rtuPattern = Pattern.compile(RTU_PATTERN);
 		Matcher m = rtuPattern.matcher(s.trim());
 		if (m.matches() == true) {
@@ -119,7 +119,7 @@ public class AddSlaveDialog extends javax.swing.JDialog {
 		return null;
 	}
 
-	private int[] parseIpv4(String s) {
+	private static int[] parseIpv4(String s) {
 		Pattern ipv4Pattern = Pattern.compile("([\\d]{1,3})\\.([\\d]{1,3})\\.([\\d]{1,3})\\.([\\d]{1,3})");
 		Matcher m = ipv4Pattern.matcher(s);
 		if (m.find() == true) {
@@ -144,7 +144,7 @@ public class AddSlaveDialog extends javax.swing.JDialog {
 		return null;
 	}
 
-	private List<ModbusSlaveAddress> tryParseIpAddress_1(String s) {
+	public static List<ModbusSlaveAddress> tryParseIpAddress_1(String s) {
 		StringBuilder sb = new StringBuilder();
 
 		// part of the pattern that finds an ip v4 address
@@ -207,7 +207,7 @@ public class AddSlaveDialog extends javax.swing.JDialog {
 		return null;
 	}
 
-	private List<ModbusSlaveAddress> tryParseIpAddress_2(String s) throws UnknownHostException {
+	public static List<ModbusSlaveAddress> tryParseIpAddress_2(String s) throws UnknownHostException {
 		StringBuilder sb = new StringBuilder();
 
 		// part of the pattern that finds an ip v4 address

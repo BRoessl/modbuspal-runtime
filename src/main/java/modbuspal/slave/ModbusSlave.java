@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import modbuspal.automation.NullAutomation;
 import modbuspal.instanciator.InstantiableManager;
+import modbuspal.main.AddSlaveDialog;
 import modbuspal.main.ModbusConst;
 import static modbuspal.main.ModbusConst.FC_READ_COILS;
 import static modbuspal.main.ModbusConst.FC_READ_DISCRETE_INPUTS;
@@ -576,7 +577,19 @@ public final class ModbusSlave implements ModbusPalXML, ModbusConst {
 			} else {
 				String id = XMLTools.getAttribute(XML_SLAVE_ID_ATTRIBUTE, node);
 				try {
-					slaveId = new ModbusSlaveAddress(InetAddress.getByName(id));
+
+					List<ModbusSlaveAddress> msa = AddSlaveDialog.tryParseRtuAddress(id);
+					if (msa == null) {
+						msa = AddSlaveDialog.tryParseIpAddress_2(id);
+						if (msa == null) {
+							msa = AddSlaveDialog.tryParseIpAddress_1(id);
+						}
+					}
+
+					slaveId = msa.get(0);
+					if (slaveId == null) {
+						slaveId = new ModbusSlaveAddress(InetAddress.getByName(id));
+					}
 				} catch (UnknownHostException exception) {
 					System.out.println("Unknown host while loading Modbus Slave: " + id);
 				}

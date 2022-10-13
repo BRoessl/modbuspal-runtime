@@ -100,18 +100,12 @@ public class ModbusPalGui {
 	 * @param {String[]} args The command line arguments
 	 */
 	public static void main(String args[]) {
-		boolean runInstall = false;
-		boolean runGui = true;
-		String installArgFlag = "-install";
 		String loadFileArgFlag = "-loadFile=";
 		String portNumberArgFlag = "-portNumber=";
 
 		if (args.length >= 1) {
 			for (String arg : args) {
-				if (arg.startsWith(installArgFlag)) {
-					runInstall = true;
-					runGui = false;
-				} else if (arg.startsWith(loadFileArgFlag)) {
+				if (arg.startsWith(loadFileArgFlag)) {
 					initialLoadFilePath = arg.substring(arg.lastIndexOf(loadFileArgFlag) + loadFileArgFlag.length());
 				} else if (arg.startsWith(portNumberArgFlag)) {
 					String portNumberString = arg
@@ -123,15 +117,14 @@ public class ModbusPalGui {
 			}
 		}
 
-		if (runGui == true) {
-			java.awt.EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					setNativeLookAndFeel();
-					newFrame().setVisible(true);
-				}
-			});
-		}
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				setNativeLookAndFeel();
+				newFrame().setVisible(true);
+			}
+		});
+
 	}
 
 	/**
