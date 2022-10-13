@@ -11,20 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
-import javax.swing.JPanel;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
 import modbuspal.binding.Binding;
 import modbuspal.link.ModbusSlaveProcessor;
 import modbuspal.main.ModbusConst;
-import static modbuspal.main.ModbusConst.FC_READ_HOLDING_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_READ_WRITE_MULTIPLE_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_WRITE_MULTIPLE_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_WRITE_SINGLE_REGISTER;
-import static modbuspal.main.ModbusConst.XC_ILLEGAL_DATA_ADDRESS;
-import static modbuspal.main.ModbusConst.XC_ILLEGAL_DATA_VALUE;
-import static modbuspal.main.ModbusConst.XC_SUCCESSFUL;
 import modbuspal.main.ModbusValuesMap;
 import modbuspal.main.ModbusPalXML;
 import modbuspal.master.ModbusMasterRequest;
@@ -38,7 +27,7 @@ import org.w3c.dom.NodeList;
  * 
  * @author nnovic
  */
-public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPalXML, ModbusConst {
+public class ModbusRegisters implements ModbusPduProcessor, ModbusPalXML, ModbusConst {
 
 	class RegisterCopy {
 		int registerAddress;
@@ -89,7 +78,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 
 	private ModbusValuesMap values = new ModbusValuesMap();
 	private HashMap<Integer, String> names = new HashMap<Integer, String>(65536);
-	private ArrayList<TableModelListener> tableModelListeners = new ArrayList<TableModelListener>();
 	private HashMap<Integer, Binding> bindings = new HashMap<Integer, Binding>(65536);
 	private int addressOffset = 1;
 
@@ -147,10 +135,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 		return false;
 	}
 
-	@Override
-	public JPanel getPduPane() {
-		return null;
-	}
 
 	@Override
 	public String getClassName() {
@@ -490,7 +474,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	 */
 	public void create(int startingIndex, int quantity) {
 		values.addIndexes(startingIndex, quantity);
-		notifyTableChanged();
 	}
 
 	/**
@@ -587,7 +570,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 		names.clear();
 		detachAllBindings();
 		bindings.clear();
-		notifyTableChanged();
 	}
 
 	/**
@@ -666,7 +648,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	public byte setValue(int index, int val) {
 		byte retval = setValueSilent(index, val);
 		if (retval == XC_SUCCESSFUL) {
-			notifyTableChanged(rowIndexOf(index), VALUE_COLUMN_INDEX);
 		}
 		return retval;
 	}
@@ -690,7 +671,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 				break;
 			}
 		}
-		notifyTableChanged();
 		return retval;
 	}
 
@@ -727,7 +707,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 			bindings.put(index, binding);
 		}
 
-		notifyTableChanged(values.getOrderOf(index));
 	}
 
 	/**
@@ -805,7 +784,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 		// delete register
 		values.delete(index);
 		names.remove(index);
-		notifyTableChanged();
 	}
 
 	void replace(ModbusRegisters source, int srcIndex, int dstIndex) {
@@ -856,7 +834,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	public void bind(int index, Binding binding) {
 		bindings.put(index, binding);
 		int row = values.getOrderOf(index);
-		notifyTableChanged(row);
 		binding.attach(this, index);
 	}
 
@@ -870,7 +847,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 		Binding removed = bindings.remove(index);
 		if (removed != null) {
 			removed.detach();
-			notifyTableChanged(values.getOrderOf(index));
 		}
 	}
 
@@ -911,7 +887,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 				bindings.remove(address);
 			}
 		}
-		notifyTableChanged();
 	}
 
 	// ==========================================================================
@@ -919,91 +894,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	// TABLE MODEL IMPLEMENTATION
 	//
 	// ==========================================================================
-
-	@Override
-	public int getRowCount() {
-		return values.getCount();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return 4;
-	}
-
-	@Override
-	public String getColumnName(int columnIndex) {
-		switch (columnIndex) {
-		case ADDRESS_COLUMN_INDEX:
-			return ADDRESS_COLUMN_NAME;
-		case VALUE_COLUMN_INDEX:
-			return "Value";
-		case NAME_COLUMN_INDEX:
-			return "Name";
-		case BINDING_COLUMN_INDEX:
-			return "Binding";
-		default:
-			return "Column " + String.valueOf(columnIndex);
-		}
-	}
-
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		switch (columnIndex) {
-		case ADDRESS_COLUMN_INDEX:
-			return Integer.class;
-		case VALUE_COLUMN_INDEX:
-			return String.class;
-		case NAME_COLUMN_INDEX:
-			return String.class;
-		case BINDING_COLUMN_INDEX:
-			return String.class;
-		default:
-			return Object.class;
-		}
-	}
-
-	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		switch (columnIndex) {
-		case ADDRESS_COLUMN_INDEX:
-			return false;
-		case VALUE_COLUMN_INDEX:
-			return !isBound(getAddressOf(rowIndex));
-		case NAME_COLUMN_INDEX:
-			return true;
-		case BINDING_COLUMN_INDEX:
-			return false;
-		default:
-			return false;
-		}
-	}
-
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		int index = values.getIndexOf(rowIndex);
-		switch (columnIndex) {
-		case ADDRESS_COLUMN_INDEX: {
-			return addressOffset + index;
-		}
-
-		case VALUE_COLUMN_INDEX: {
-			int reg = getValue(index);
-			return String.valueOf(reg);
-		}
-		case NAME_COLUMN_INDEX: {
-			return names.get(index);
-		}
-		case BINDING_COLUMN_INDEX: {
-			Binding binding = bindings.get(index);
-			if (binding != null) {
-				return binding.toString();
-			} else {
-				return null;
-			}
-		}
-		}
-		return null;
-	}
 
 	/**
 	 * Checks if the specified value is within the allowed boundaries. For a MODBUS
@@ -1020,40 +910,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 			return 65535;
 		}
 		return value;
-	}
-
-	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		int index = values.getIndexOf(rowIndex);
-		switch (columnIndex) {
-		case VALUE_COLUMN_INDEX: {
-			if (aValue instanceof String) {
-				Integer val = Integer.parseInt((String) aValue);
-				values.putByIndex(index, checkValueBoundaries(val));
-				notifyTableChanged(rowIndex, columnIndex);
-			}
-			break;
-		}
-
-		case NAME_COLUMN_INDEX: {
-			if (aValue instanceof String) {
-				String val = (String) aValue;
-				names.put(index, val);
-				notifyTableChanged(rowIndex, columnIndex);
-			}
-			break;
-		}
-		}
-	}
-
-	@Override
-	public void addTableModelListener(TableModelListener l) {
-		tableModelListeners.add(l);
-	}
-
-	@Override
-	public void removeTableModelListener(TableModelListener l) {
-		tableModelListeners.remove(l);
 	}
 
 	// ==========================================================================
@@ -1106,7 +962,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	void setOffset(int offset) {
 		if (offset != addressOffset) {
 			addressOffset = offset;
-			notifyTableChanged();
 		}
 	}
 
@@ -1174,7 +1029,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 				loadRegister(child);
 			}
 		}
-		notifyTableChanged();
 	}
 
 	private void loadRegister(Node node) {
@@ -1223,21 +1077,6 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 		throw new UnsupportedOperationException("not implemented");
 	}
 
-	// ==========================================================================
-	//
-	// EVENTS MANAGEMENT
-	//
-	// ==========================================================================
-
-	/**
-	 * Triggers a "tableChanged" event for the registered TableModelListeners.
-	 */
-	public void notifyTableChanged() {
-		TableModelEvent event = new TableModelEvent(this);
-		for (TableModelListener l : tableModelListeners) {
-			l.tableChanged(event);
-		}
-	}
 
 	/**
 	 * Triggers a "tableChanged" event for the registered TableModelListeners. The
@@ -1247,21 +1086,8 @@ public class ModbusRegisters implements ModbusPduProcessor, TableModel, ModbusPa
 	 */
 	public void notifyRegisterChanged(int valueIndex) {
 		int index = rowIndexOf(valueIndex);
-		notifyTableChanged(index);
 	}
 
-	private void notifyTableChanged(int rowIndex) {
-		TableModelEvent event = new TableModelEvent(this, rowIndex);
-		for (TableModelListener l : tableModelListeners) {
-			l.tableChanged(event);
-		}
-	}
 
-	private void notifyTableChanged(int rowIndex, int columnIndex) {
-		TableModelEvent event = new TableModelEvent(this, rowIndex, rowIndex, columnIndex);
-		for (TableModelListener l : tableModelListeners) {
-			l.tableChanged(event);
-		}
-	}
 
 }

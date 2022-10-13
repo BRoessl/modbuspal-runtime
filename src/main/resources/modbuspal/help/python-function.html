@@ -4,56 +4,62 @@ and open the template in the editor.
 -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-    <title>ModbusPal</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    
-      <h1>How to write a PDU processor using Python?</h1>
+<head>
+<title>ModbusPal</title>
+<link rel="stylesheet" type="text/css" href="styles.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
 
-      <p>A ModbusPal project may require to handle non-standard MODBUS function.
-      Actually, the specification defines two ranges of user-defined functions,
-      65-75 and 100-110.</p>
+	<h1>How to write a PDU processor using Python?</h1>
 
-      <p>ModbusPal handles standard requests with built-in objects called
-      <q>PDU processors</q>. In order to handle those non-standard function,
-      the approach of ModbusPal is to let the user create its own PDU
-      processors thanks to scripts.</p>
+	<p>A ModbusPal project may require to handle non-standard MODBUS
+		function. Actually, the specification defines two ranges of
+		user-defined functions, 65-75 and 100-110.</p>
 
-      <h2>Important notice</h2>
+	<p>
+		ModbusPal handles standard requests with built-in objects called <q>PDU
+			processors</q>. In order to handle those non-standard function, the
+		approach of ModbusPal is to let the user create its own PDU processors
+		thanks to scripts.
+	</p>
 
-      <div class="important">
-      <ul>
-          <li>When a script defines a new PDU processor class, it should be
-          executed before the MODBUS slaves are loaded from the project
-          file. The script should be added with the <q>Before init</q> parameter.
-          <li>It is highly recommanded to implement the <q>getClassName()</q> function.
-      </ul>
-      </div>
+	<h2>Important notice</h2>
 
-      <h2>Minimalist PDU processor</h2>
+	<div class="important">
+		<ul>
+			<li>When a script defines a new PDU processor class, it should
+				be executed before the MODBUS slaves are loaded from the project
+				file. The script should be added with the <q>Before init</q>
+				parameter.
+			<li>It is highly recommanded to implement the <q>getClassName()</q>
+				function.
+		</ul>
+	</div>
 
-      <ol>
-          <li>Import the class <q>PythonFunction</q> from the <q>modbuspal.script</q> package.
-          <li>Create a Python class that inherits <q>PythonFunction</q>.
-          <li>Override the <q>processPDU()</q> function (the default implementation
-          produces no reply).
-      </ol>
+	<h2>Minimalist PDU processor</h2>
 
-      <p>Then the new PDU processor should be registered into the project, so that
-          it can be used by any MODBUS slave in the
-          current project:</p>
+	<ol>
+		<li>Import the class <q>PythonFunction</q> from the <q>modbuspal.script</q>
+			package.
+		<li>Create a Python class that inherits <q>PythonFunction</q>.
+		<li>Override the <q>processPDU()</q> function (the default
+			implementation produces no reply).
+	</ol>
 
-      <ol>
-          <li>Create an instance of the PDU processor.
-          <li>Register this instance by calling the <q>ModbusPal.addFunctionInstantiator()</q> function.
-      </ol>
+	<p>Then the new PDU processor should be registered into the
+		project, so that it can be used by any MODBUS slave in the current
+		project:</p>
 
-      <div class="code-sample">
-          <a href="py/MinimalistFunction.py">MinimalistFunction.py</a>
-      <pre>
+	<ol>
+		<li>Create an instance of the PDU processor.
+		<li>Register this instance by calling the <q>ModbusPal.addFunctionInstantiator()</q>
+			function.
+	</ol>
+
+	<div class="code-sample">
+		<a href="py/MinimalistFunction.py">MinimalistFunction.py</a>
+		<pre>
 from modbuspal.script import PythonFunction
 from modbuspal.toolkit import ModbusTools
 
@@ -69,25 +75,34 @@ class MinimalistFunction(PythonFunction):
 mf = MinimalistFunction();
 ModbusPal.addFunctionInstantiator(mf);
       </pre>
-      </div>
+	</div>
 
-      <h2>Why does the PDU processor have a strange name?</h2>
+	<h2>Why does the PDU processor have a strange name?</h2>
 
-      <p>The above example will create a new PDU processor with a rather strange name:
-      <img src="img/view_of_python_function_strange_name.jpg" class="img-stand-alone" alt="View of a PDU processor with a strange name"/>
-      </p>
+	<p>
+		The above example will create a new PDU processor with a rather
+		strange name: <img src="img/view_of_python_function_strange_name.jpg"
+			class="img-stand-alone"
+			alt="View of a PDU processor with a strange name" />
+	</p>
 
-      <p>This is because, by default, the PDU processor is named after the Java classname.
-          But in the case of a class created by a Python script, the resulting classname
-          is cryptic.</p>
+	<p>This is because, by default, the PDU processor is named after
+		the Java classname. But in the case of a class created by a Python
+		script, the resulting classname is cryptic.</p>
 
-      <p>To solve this problem, the PDU processor must implement the <q>getClassName()</q>
-      function in order to return a better name.</p>
+	<p>
+		To solve this problem, the PDU processor must implement the <q>getClassName()</q>
+		function in order to return a better name.
+	</p>
 
-      <p><strong>It is highly recommanded to implement the <q>getClassName()</q> function.</strong></p>
+	<p>
+		<strong>It is highly recommanded to implement the <q>getClassName()</q>
+			function.
+		</strong>
+	</p>
 
-      <div class="code-sample">
-      <pre>
+	<div class="code-sample">
+		<pre>
 from modbuspal.script import PythonFunction
 from modbuspal.toolkit import ModbusTools
 
@@ -106,108 +121,128 @@ class MinimalistFunction(PythonFunction):
 mf = MinimalistFunction();
 ModbusPal.addFunctionInstantiator(mf);
       </pre>
-      </div>
+	</div>
 
-      <h2>How does the processPDU function work?</h2>
+	<h2>How does the processPDU function work?</h2>
 
-      <p>The prototype of the function is as follow:</p>
-      <pre>
+	<p>The prototype of the function is as follow:</p>
+	<pre>
         def processPDU(self,functionCode,slaveID,buffer,offset,createIfNotExist):
       </pre>
 
-      <p>Basically, the processPDU function provides an array of bytes (<q>buffer</q>)
-          that contains the PDU to process. The developper must implement the reading
-          of the content of the request.
-          Then the reply must also be written into the same byte buffer,
-          and the length of that reply must be returned by the function.</p>
+	<p>
+		Basically, the processPDU function provides an array of bytes (<q>buffer</q>)
+		that contains the PDU to process. The developper must implement the
+		reading of the content of the request. Then the reply must also be
+		written into the same byte buffer, and the length of that reply must
+		be returned by the function.
+	</p>
 
-      <p>Here is a full description of the arguments:</p>
-      <dl>
-          <dt>functionCode</dt>
-          <dd>The function code that triggered the call to this PDU processor instance.</dd>
-          <dt>slaveID</dt>
-          <dd>The MODBUS slave address that is the target of the request.</dd>
-          <dt>buffer</dt>
-          <dd>The byte buffer containing the request, and where the reply must be written.</dd>
-          <dt>offset</dt>
-          <dd>Offset where the actual data starts in the buffer.</dd>
-          <dt>createIfNotExist</dt>
-          <dd>True is the "Learn mode" is active, False otherwise.</dd>
-      </dl>
+	<p>Here is a full description of the arguments:</p>
+	<dl>
+		<dt>functionCode</dt>
+		<dd>The function code that triggered the call to this PDU
+			processor instance.</dd>
+		<dt>slaveID</dt>
+		<dd>The MODBUS slave address that is the target of the request.</dd>
+		<dt>buffer</dt>
+		<dd>The byte buffer containing the request, and where the reply
+			must be written.</dd>
+		<dt>offset</dt>
+		<dd>Offset where the actual data starts in the buffer.</dd>
+		<dt>createIfNotExist</dt>
+		<dd>True is the "Learn mode" is active, False otherwise.</dd>
+	</dl>
 
-      <p>The function must return the length of the reply. If the returned
-      length is less than or equal to zero, then ModbusPal will react like there
-      was no reply to the request. Do not forget that the reply is at least
-      one byte long, because the first byte contains the function code.  </p>
-      
-      <h2>How to initialize the PDU processor?</h2>
+	<p>The function must return the length of the reply. If the
+		returned length is less than or equal to zero, then ModbusPal will
+		react like there was no reply to the request. Do not forget that the
+		reply is at least one byte long, because the first byte contains the
+		function code.</p>
 
-      <p>Some PDU processors will require to initialize variables when they
-          are instanciated. Normally, this would be done in the constructor
-          of the Python class, the <q>__init__()</q> function.</p>
+	<h2>How to initialize the PDU processor?</h2>
 
-      <p>But, due to the way ModbusPal operates, the constructor is not always
-      called. So, in order to initialize the internal variables of the PDU processor,
-      the user should implement the <q>init()</q> function instead.</p>
+	<p>
+		Some PDU processors will require to initialize variables when they are
+		instanciated. Normally, this would be done in the constructor of the
+		Python class, the <q>__init__()</q> function.
+	</p>
 
-      <p>Please note that one particular instance of a PDU processor can be
-          associated to multiple function codes; the <q>init()</q> will be
-          called only once, when a new instance of a PDU processor is associated
-          for the first time to a function code. When the same instance is associated
-          to another function code, the <q>init()</q> function won't be called
-          again.</p>
+	<p>
+		But, due to the way ModbusPal operates, the constructor is not always
+		called. So, in order to initialize the internal variables of the PDU
+		processor, the user should implement the <q>init()</q> function
+		instead.
+	</p>
 
-      <p>All initializations that are required by the PDU processor should be made
-          into the <q>init()</q> function. The following sample of code illustrates
-      how:</p>
+	<p>
+		Please note that one particular instance of a PDU processor can be
+		associated to multiple function codes; the <q>init()</q> will be
+		called only once, when a new instance of a PDU processor is associated
+		for the first time to a function code. When the same instance is
+		associated to another function code, the <q>init()</q> function won't
+		be called again.
+	</p>
 
-      <div class="code-sample">
-          <pre>
+	<p>
+		All initializations that are required by the PDU processor should be
+		made into the <q>init()</q> function. The following sample of code
+		illustrates how:
+	</p>
+
+	<div class="code-sample">
+		<pre>
 class MyFunction(PythonFunction):
   def init(self):
     self.myReplyString = "Hello,world!";
           </pre>
-      </div>
+	</div>
 
-      <h2>How to finalize the PDU processor?</h2>
+	<h2>How to finalize the PDU processor?</h2>
 
-      <p>When all instances of a PDU processor have been removed from the
-          project, ModbusPal will call its <q>reset()</q> function. The
-          <q>reset()</q> function serves as a destructor.</p>
+	<p>
+		When all instances of a PDU processor have been removed from the
+		project, ModbusPal will call its <q>reset()</q> function. The <q>reset()</q>
+		function serves as a destructor.
+	</p>
 
-      <p>The default implementation does nothing. It the developer needs to
-          perform some actions when the PDU processor is not used anymore,
-          then the <q>reset()</q> should be overridden:</p>
+	<p>
+		The default implementation does nothing. It the developer needs to
+		perform some actions when the PDU processor is not used anymore, then
+		the <q>reset()</q> should be overridden:
+	</p>
 
-      <div class="code-sample">
-          <pre>
+	<div class="code-sample">
+		<pre>
 class MyFunction(PythonFunction):
   def init(self):
     self.myReplyString = "Hello,world!";
   def reset(self):
     self.myReplyString = None;
           </pre>
-      </div>
+	</div>
 
-     <h2>How to create a configuration panel for the PDU processor?</h2>
+	<h2>How to create a configuration panel for the PDU processor?</h2>
 
-      <p>It is a natural thing that a PDU processor lets the user modify some
-          parameters, the same way that the user is able to edit the content
-          of the holding registers or coils. But this task implies that a
-          graphical interface is available.</p>
+	<p>It is a natural thing that a PDU processor lets the user modify
+		some parameters, the same way that the user is able to edit the
+		content of the holding registers or coils. But this task implies that
+		a graphical interface is available.</p>
 
-      <p>When writing a PythonFunction, a graphical interface can be provided
-          to ModbusPal so that the parameters of the PDU processor are modified
-          by the user.</p>
+	<p>When writing a PythonFunction, a graphical interface can be
+		provided to ModbusPal so that the parameters of the PDU processor are
+		modified by the user.</p>
 
-      <p>To do so, simply implement the <q>getPduPane()</q> function; it
-          should return an object of the javax.swing.JPanel class.</p>
+	<p>
+		To do so, simply implement the <q>getPduPane()</q> function; it should
+		return an object of the javax.swing.JPanel class.
+	</p>
 
-      <p>The following example creates a dummy user interface. There is actually
-          no input, but only a text in a JLabel:</p>
+	<p>The following example creates a dummy user interface. There is
+		actually no input, but only a text in a JLabel:</p>
 
-      <div class="code-sample">
-          <pre>
+	<div class="code-sample">
+		<pre>
 class MyFunction(PythonFunction):
 
   def init(self):
@@ -218,29 +253,33 @@ class MyFunction(PythonFunction):
   def getPduPane(self):
     return self.controlPanel;
           </pre>
-      </div>
+	</div>
 
-     <h2>How to save and load the settings of the PDU processor?</h2>
+	<h2>How to save and load the settings of the PDU processor?</h2>
 
-      <p>If the PDU processor lets the user to modify some parameters, usually
-      thanks to a control panel, then it becomes necessary to save those parameters
-      into the project file. And then, of course, it is necessary to be able to
-      load those parameters from the project file.</p>
+	<p>If the PDU processor lets the user to modify some parameters,
+		usually thanks to a control panel, then it becomes necessary to save
+		those parameters into the project file. And then, of course, it is
+		necessary to be able to load those parameters from the project file.</p>
 
-      <h3>Save</h3>
+	<h3>Save</h3>
 
-      <p>To save the parameters of the PDU processor, implement the
-      <q>savePduProcessorSettings()</q> function. This function has one important
-      parameter: it is the OutputStream to write into.</p>
+	<p>
+		To save the parameters of the PDU processor, implement the <q>savePduProcessorSettings()</q>
+		function. This function has one important parameter: it is the
+		OutputStream to write into.
+	</p>
 
-      <p>The project file is an XML formatted file, so its best if the PDU processor
-          uses also XML.</p>
+	<p>The project file is an XML formatted file, so its best if the
+		PDU processor uses also XML.</p>
 
-      <p>The following example saves the value of <q>paramA</q> and <q>paramB</q>
-          into the project file:</p>
+	<p>
+		The following example saves the value of <q>paramA</q> and <q>paramB</q>
+		into the project file:
+	</p>
 
-      <div class="code-sample">
-          <pre>
+	<div class="code-sample">
+		<pre>
 class MyFunction(PythonFunction):
 
   def init(self):
@@ -251,23 +290,25 @@ class MyFunction(PythonFunction):
     outputStream.write("&lt;paramA value=\""+ str(self.paramA) +"\" />\r\n");
     outputStream.write("&lt;paramB value=\""+ str(self.paramB) +"\" />\r\n");
           </pre>
-      </div>
+	</div>
 
-      <h3>Load</h3>
+	<h3>Load</h3>
 
-      <p>In order to load the settings of a PDU processor, the
-          <q>loadPduProcessorSettings()</q> function has
-          to be implemented.</p>
+	<p>
+		In order to load the settings of a PDU processor, the <q>loadPduProcessorSettings()</q>
+		function has to be implemented.
+	</p>
 
-      <p>The following example will load the settings saved by the previous example.
-          If the settings have been saved using the XML format, then the user
-          can use the powerful APIs of Java, as well as the toolkit class provided
-          by ModbusPal, <q>modbuspal.toolkit.XMLTools</q>.
-          The input parameter <q>nodeList</q>is
-          an instance of <q>org.w3c.dom.NodeList</q>.</p>
+	<p>
+		The following example will load the settings saved by the previous
+		example. If the settings have been saved using the XML format, then
+		the user can use the powerful APIs of Java, as well as the toolkit
+		class provided by ModbusPal, <q>modbuspal.toolkit.XMLTools</q>. The
+		input parameter <q>nodeList</q>is an instance of <q>org.w3c.dom.NodeList</q>.
+	</p>
 
-      <div class="code-sample">
-          <pre>
+	<div class="code-sample">
+		<pre>
 class MyFunction(PythonFunction):
 
   def init(self):
@@ -282,54 +323,101 @@ class MyFunction(PythonFunction):
     if nodeParamB is not None:
         self.paramB = int( XMLTools.getAttribute("value",nodeParamB) );
           </pre>
-      </div>
+	</div>
 
-      <h2>API</h2>
+	<h2>API</h2>
 
-      <p>Please consult the Javadoc of ModbusPal in order to get more
-      information on all the classes introduced in this page.</p>
+	<p>Please consult the Javadoc of ModbusPal in order to get more
+		information on all the classes introduced in this page.</p>
 
-      <h2>Real-case example</h2>
+	<h2>Real-case example</h2>
 
-      <p>The following example is real-case PDU processor script. The device
-      only replies to MODBUS requests with function code 66.
-      The manufacturer provides the following description of
-          the reply:</p>
+	<p>The following example is real-case PDU processor script. The
+		device only replies to MODBUS requests with function code 66. The
+		manufacturer provides the following description of the reply:</p>
 
-      <table>
-          <tr><th>Bytes</th><th>Content</th><th>Expected value</th></tr>
-          <tr><td>0</td><td>Function code</td><td>66</td></tr>
-          <tr><td>1</td><td>Sequence number (0-255 with rollover)</td></tr>
-          <tr><td>2</td><td>Configuration switch settings</td></tr>
-          <tr><td>3-6</td><td>Pulse count 1</td></tr>
-          <tr><td>7-10</td><td>Pulse count 2</td></tr>
-          <tr><td>11-12</td><td>Analog input 1</td></tr>
-          <tr><td>13-14</td><td>Analog input 2</td></tr>
-          <tr><td>15-16</td><td>Power monitor</td></tr>
-          <tr><td>17-20</td><td>Jennic digital states from u32AHI_DIOReadInput()</td></tr>
-          <tr><td>21-27</td><td>Reserved for future expansion</td></tr>
-          <tr><td>28</td><td>Version Year</td><td>11 (0x0B)</td></tr>
-          <tr><td>29</td><td>Version Month</td><td>03 (0x03)</td></tr>
-           <tr><td>30</td><td>Version Day</td><td>22 (0x16)</td></tr>
-      </table>
+	<table>
+		<tr>
+			<th>Bytes</th>
+			<th>Content</th>
+			<th>Expected value</th>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>Function code</td>
+			<td>66</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>Sequence number (0-255 with rollover)</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Configuration switch settings</td>
+		</tr>
+		<tr>
+			<td>3-6</td>
+			<td>Pulse count 1</td>
+		</tr>
+		<tr>
+			<td>7-10</td>
+			<td>Pulse count 2</td>
+		</tr>
+		<tr>
+			<td>11-12</td>
+			<td>Analog input 1</td>
+		</tr>
+		<tr>
+			<td>13-14</td>
+			<td>Analog input 2</td>
+		</tr>
+		<tr>
+			<td>15-16</td>
+			<td>Power monitor</td>
+		</tr>
+		<tr>
+			<td>17-20</td>
+			<td>Jennic digital states from u32AHI_DIOReadInput()</td>
+		</tr>
+		<tr>
+			<td>21-27</td>
+			<td>Reserved for future expansion</td>
+		</tr>
+		<tr>
+			<td>28</td>
+			<td>Version Year</td>
+			<td>11 (0x0B)</td>
+		</tr>
+		<tr>
+			<td>29</td>
+			<td>Version Month</td>
+			<td>03 (0x03)</td>
+		</tr>
+		<tr>
+			<td>30</td>
+			<td>Version Day</td>
+			<td>22 (0x16)</td>
+		</tr>
+	</table>
 
 
-      <p>The following script covers the specification and also:</p>
-      <ul>
-          <li>It creates a control panel for display in the MODBUS slave
-              editor, letting the user customize some parameters
-          <li>The user can define 4 values manually (<q>Pulse 1</q>, <q>Pulse 2</q>,
-              <q>Analog 1</q> and <q>Analog 2</q>), or associate an automation
-              to each of these values.
-          <li>It saves the configuration with XML formatting into the project file
-          <li>It loads those parameters from the project file
-    </ul>
+	<p>The following script covers the specification and also:</p>
+	<ul>
+		<li>It creates a control panel for display in the MODBUS slave
+			editor, letting the user customize some parameters
+		<li>The user can define 4 values manually (<q>Pulse 1</q>, <q>Pulse
+				2</q>, <q>Analog 1</q> and <q>Analog 2</q>), or associate an automation
+			to each of these values.
+		<li>It saves the configuration with XML formatting into the
+			project file
+		<li>It loads those parameters from the project file
+	</ul>
 
 
 
-      <div class="code-sample">
-          <a href="py/Function66.py">Function66.py</a>
-      <pre>
+	<div class="code-sample">
+		<a href="py/Function66.py">Function66.py</a>
+		<pre>
 from modbuspal.script import PythonFunction
 from modbuspal.toolkit import ModbusTools
 from modbuspal.toolkit import XMLTools
@@ -687,7 +775,7 @@ class Function66(PythonFunction,ChangeListener,ActionListener,AutomationExecutio
 Function66Instance = Function66();
 ModbusPal.addFunctionInstantiator( Function66Instance );
       </pre>
-      </div>
+	</div>
 
-  </body>
+</body>
 </html>

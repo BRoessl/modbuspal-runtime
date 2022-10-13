@@ -7,7 +7,6 @@ package modbuspal.slave;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.swing.JPanel;
 import modbuspal.instanciator.Instantiable;
 import modbuspal.master.ModbusMasterRequest;
 import org.w3c.dom.NodeList;
@@ -68,14 +67,6 @@ public interface ModbusPduProcessor extends Instantiable<ModbusPduProcessor> {
 	public int buildPDU(ModbusMasterRequest mmr, ModbusSlaveAddress slaveID, byte[] buffer, int offset,
 			boolean createIfNotExist);
 
-	/**
-	 * Returns a JPanel that is designed to graphically reflect the settings of the
-	 * PduProcessor. Those settings will be, most of the time, various values that
-	 * will compose the reply to the request.
-	 * 
-	 * @return a JPanel to edit the settings of the PduProcessor
-	 */
-	public JPanel getPduPane();
 
 	/**
 	 * saves the parameter of the instance into the provided output stream, in XML

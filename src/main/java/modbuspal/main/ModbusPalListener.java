@@ -6,7 +6,6 @@
 package modbuspal.main;
 
 import modbuspal.automation.Automation;
-import modbuspal.master.ModbusMasterTask;
 import modbuspal.slave.ModbusSlave;
 
 /**
@@ -63,7 +62,4 @@ public interface ModbusPalListener {
 	 */
 	public void pduNotServiced();
 
-	public void modbusMasterTaskRemoved(ModbusMasterTask mmt);
-
-	public void modbusMasterTaskAdded(ModbusMasterTask mmt);
 }

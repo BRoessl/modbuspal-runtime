@@ -8,7 +8,6 @@ package modbuspal.generator.linear;
 import modbuspal.generator.Generator;
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.swing.JPanel;
 import modbuspal.toolkit.XMLTools;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +18,6 @@ import org.w3c.dom.NodeList;
  * @author nnovic
  */
 public class LinearGenerator extends Generator {
-	private LinearControlPanel panel;
 	double startValue = 0.0;
 	double endValue = 0.0;
 	boolean relativeStart = false;
@@ -29,8 +27,6 @@ public class LinearGenerator extends Generator {
 	 * Creates a new instance of LinearGenerator.
 	 */
 	public LinearGenerator() {
-		setIcon("LinearGenerator.png");
-		panel = new LinearControlPanel(this);
 	}
 
 	@Override
@@ -82,8 +78,6 @@ public class LinearGenerator extends Generator {
 		relativeEnd = Boolean.parseBoolean(endRel);
 
 		// update generator's panel
-		panel.endTextField.setText(String.valueOf(endVal));
-		panel.endRelativeCheckBox.setSelected(relativeEnd);
 	}
 
 	private void loadStart(Node node) {
@@ -95,14 +89,7 @@ public class LinearGenerator extends Generator {
 		startValue = Double.parseDouble(startVal);
 		relativeStart = Boolean.parseBoolean(startRel);
 
-		// update generator's panel
-		panel.startTextField.setText(String.valueOf(startValue));
-		panel.startRelativeCheckBox.setSelected(relativeStart);
 	}
 
-	@Override
-	public JPanel getControlPanel() {
-		return panel;
-	}
 
 }

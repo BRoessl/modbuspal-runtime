@@ -4,15 +4,12 @@
  */
 package modbuspal.master;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 /**
  *
  * @author JMC15
  */
-public class ModbusMasterRoot extends DefaultMutableTreeNode {
+public class ModbusMasterRoot {
 	public ModbusMasterRoot() {
-		setUserObject("Tasks");
 	}
 
 }

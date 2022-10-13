@@ -4,17 +4,11 @@
  */
 package modbuspal.master;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import modbuspal.main.ModbusPalGui;
-import modbuspal.main.ModbusPalProject;
-import modbuspal.slave.ModbusSlaveAddress;
-import modbuspal.toolkit.ModbusTools;
-
 /**
  *
  * @author JMC15
  */
-public class ModbusMasterRequest extends DefaultMutableTreeNode {
+public class ModbusMasterRequest  {
 	public static ModbusMasterRequest getReadHoldingRegistersRequest(int startingAddress, int quantityOfRegisters) {
 		ModbusMasterRequest output = new ModbusMasterRequest();
 		output.functionCode = 0x03;
@@ -24,7 +18,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 		String caption = String.format(
 				"3 (0x03) Read holding registers (starting address = %d, quantity of registers = %d)", startingAddress,
 				quantityOfRegisters);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -37,7 +30,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 		String caption = String.format(
 				"16 (0x10) Write multiple registers (starting address = %d, quantity of registers = %d)",
 				startingAddress, quantityOfRegisters);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -49,7 +41,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 
 		String caption = String.format("1 (0x01) Read coils (starting address = %d, quantity of coils = %d)",
 				startingAddress, quantityToRead);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -61,7 +52,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 
 		String caption = String.format("2 (0x02) Read discrete inputs (starting address = %d, quantity of inputs = %d)",
 				startingAddress, quantityToRead);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -72,7 +62,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 		output.quantityToWrite = 1;
 
 		String caption = String.format("5 (0x05) Write single coil (output address = %d)", outputAddress);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -83,7 +72,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 		output.quantityToWrite = 1;
 
 		String caption = String.format("6 (0x06) Write single register (register address = %d)", registerAddress);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -95,7 +83,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 
 		String caption = String.format("15 (0x0F) Write multiple coils (starting address = %d, quantity of coils = %d)",
 				startingAddress, quantityOfOutputs);
-		output.setUserObject(caption);
 		return output;
 	}
 
@@ -112,7 +99,6 @@ public class ModbusMasterRequest extends DefaultMutableTreeNode {
 				"23 (0x17) Read/Write multiple registers (read starting address = %d, quantity to read = %d, write starting address = %d, quantity to write = %d)",
 				readStartingAddress, quantityToRead, writeStartingAddress, quantityToWrite);
 
-		output.setUserObject(caption);
 		return output;
 	}
 

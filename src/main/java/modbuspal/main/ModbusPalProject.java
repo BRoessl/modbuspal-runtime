@@ -22,7 +22,6 @@ import modbuspal.automation.NullAutomation;
 import modbuspal.binding.Binding;
 import modbuspal.generator.Generator;
 import modbuspal.instanciator.InstantiableManager;
-import modbuspal.master.ModbusMasterTask;
 import modbuspal.slave.ModbusSlave;
 import modbuspal.slave.ModbusPduProcessor;
 import modbuspal.slave.ModbusSlaveAddress;
@@ -45,7 +44,6 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 	File projectFile = null;
 	private final ArrayList<ModbusPalListener> listeners = new ArrayList<ModbusPalListener>(); // synchronized
 	private final ArrayList<Automation> automations = new ArrayList<Automation>();
-	private final ArrayList<ModbusMasterTask> masterTasks = new ArrayList<ModbusMasterTask>();
 	private boolean learnModeEnabled = false;
 
 	final InstantiableManager<Generator> generatorFactory = new InstantiableManager<Generator>();
@@ -187,19 +185,8 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 			// If already exists:
 			if (automation != null) {
 				// display a dialog and ask the user what to do:
-				ErrorMessage dialog = new ErrorMessage(2);
-				dialog.append("An automation called \"" + name
-						+ "\" already exists. Do you want to overwrite the existing automation or to keep it ?");
-				dialog.setButton(0, "Overwrite");
-				dialog.setButton(1, "Keep existing");
-				dialog.setTitle("Importing automation \"" + name + "\"");
-				dialog.setVisible(true);
-
-				// if the user does not want to overwrite the existing
-				// automation, skip and continue with the other automations
-				if (dialog.getButton() != 0) {
-					continue;
-				}
+				System.out.println("An automation called \"" + name
+						+ "\" already exists. Overwriting...");
 
 				// otherwise, replace the content of the existing automation
 				// with the new settings:
@@ -256,9 +243,9 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 			}
 
 			catch (InstantiationException ex) {
-				Logger.getLogger(ModbusPalPane.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ModbusPalRuntime.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (IllegalAccessException ex) {
-				Logger.getLogger(ModbusPalPane.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(ModbusPalRuntime.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}
@@ -634,47 +621,6 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 		return name;
 	}
 
-	/**
-	 * This method adds an automation slave into the application. If an automation
-	 * with the same name already exists, a dialog will popup and invite the user to
-	 * choose between keeping the existing automation or replacing it by the new.
-	 * 
-	 * @param automation the new automation to add
-	 * @return a reference on the new or existing automation, depending on the
-	 *         user's choice. null if an error occured.
-	 */
-	public Automation submitAutomation(Automation automation) {
-		// check if an automation already exists with the same name
-		String name = automation.getName();
-		Automation existing = getAutomation(name);
-
-		if (existing != null) {
-			// show a dialog to let the user decide
-			// what to do in order to resolve the conflict:
-			ErrorMessage conflict = new ErrorMessage(2);
-			conflict.setTitle("Address conflict");
-			conflict.append("You are trying to add a new automation with name \"" + name + "\".");
-			conflict.append("An existing automation already exists with this name. What do you want to do ?");
-			conflict.setButton(0, "Keep existing");
-			conflict.setButton(1, "Replace with new");
-			conflict.setVisible(true);
-
-			// if "Keep existing" is chosen:
-			if (conflict.getButton() == 0) {
-				return existing;
-			}
-
-			else {
-				// before replacing with new, remove old:
-				removeAutomation(existing);
-			}
-		}
-
-		if (addAutomation(automation) == true) {
-			return automation;
-		}
-		return null;
-	}
 
 	// ==========================================================================
 	//
@@ -924,46 +870,6 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 		}
 	}
 
-	/**
-	 * This method adds a modbus slave into the application. If a modbus slave with
-	 * the same id already exists, a dialog will popup and invite the user to choose
-	 * between keeping the existing slave or replacing it by the new.
-	 * 
-	 * @param slave the new modbus slave to add
-	 * @return a reference on the new or existing modbus slave, depending on the
-	 *         user's choice. null if an error occured.
-	 */
-	public ModbusSlave submitModbusSlave(ModbusSlave slave) {
-		ModbusSlaveAddress slaveID = slave.getSlaveId();
-
-		// check if slaveID is already assigned:
-		if (getModbusSlave(slaveID) != null) {
-			// show a dialog to let the user decide
-			// what to do in order to resolve the conflict:
-			ErrorMessage conflict = new ErrorMessage(2);
-			conflict.setTitle("Address conflict");
-			conflict.append("You are trying to add a new slave with address " + slaveID + ".");
-			conflict.append("An existing slave already uses this address. What do you want to do ?");
-			conflict.setButton(0, "Keep existing");
-			conflict.setButton(1, "Replace with new");
-			conflict.setVisible(true);
-
-			// if "Keep existing" is chosen:
-			if (conflict.getButton() == 0) {
-				return getModbusSlave(slaveID);
-			}
-
-			else {
-				// before replacing with new, remove old:
-				removeModbusSlave(slaveID);
-			}
-		}
-
-		if (addModbusSlave(slave) == true) {
-			return slave;
-		}
-		return null;
-	}
 
 	/**
 	 * Removes the specified MODBUS slave from the project.
@@ -1456,37 +1362,4 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 		return projectFile.getName();
 	}
 
-	public void addModbusMasterTask(ModbusMasterTask mmt) {
-		if (masterTasks.contains(mmt) == false) {
-			masterTasks.add(mmt);
-			notifyModbusMasterTaskAdded(mmt);
-		}
-	}
-
-	private void notifyModbusMasterTaskAdded(ModbusMasterTask mmt) {
-		synchronized (listeners) {
-			for (ModbusPalListener l : listeners) {
-				l.modbusMasterTaskAdded(mmt);
-			}
-		}
-	}
-
-	public void removeModbusMasterTask(ModbusMasterTask mmt) {
-		if (masterTasks.contains(mmt) == true) {
-			masterTasks.add(mmt);
-			notifyModbusMasterTaskRemoved(mmt);
-		}
-	}
-
-	private void notifyModbusMasterTaskRemoved(ModbusMasterTask mmt) {
-		synchronized (listeners) {
-			for (ModbusPalListener l : listeners) {
-				l.modbusMasterTaskRemoved(mmt);
-			}
-		}
-	}
-
-	public List<ModbusMasterTask> getModbusMasterTasks() {
-		return masterTasks;
-	}
 }

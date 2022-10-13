@@ -8,7 +8,6 @@ package modbuspal.generator.sine;
 import java.io.IOException;
 import java.io.OutputStream;
 import modbuspal.generator.Generator;
-import javax.swing.JPanel;
 import modbuspal.toolkit.XMLTools;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +18,6 @@ import org.w3c.dom.NodeList;
  * @author nnovic
  */
 public class SineGenerator extends Generator {
-	private SineControlPanel panel;
 	private double initialAngle = 0.0;
 	double amplitude = 1.0;
 	double period = 1.0;
@@ -30,8 +28,6 @@ public class SineGenerator extends Generator {
 	 * Creates a new instance of SineGenerator.
 	 */
 	public SineGenerator() {
-		setIcon("SineGenerator.png");
-		panel = new SineControlPanel(this);
 	}
 
 	@Override
@@ -98,10 +94,6 @@ public class SineGenerator extends Generator {
 			catchup = Boolean.parseBoolean(XMLTools.getAttribute("enabled", cuNode));
 		}
 
-		panel.amplitudeTextField.setText(String.valueOf(amplitude));
-		panel.periodTextField.setText(String.valueOf(period));
-		panel.offsetTextField.setText(String.valueOf(offset));
-		panel.catchupCheckBox.setSelected(catchup);
 	}
 
 	/*
@@ -128,9 +120,5 @@ public class SineGenerator extends Generator {
 	 * panel.startRelativeCheckBox.setSelected(relativeStart); }
 	 */
 
-	@Override
-	public JPanel getControlPanel() {
-		return panel;
-	}
 
 }

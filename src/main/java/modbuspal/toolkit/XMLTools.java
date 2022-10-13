@@ -13,7 +13,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import modbuspal.main.ModbusPalPane;
+import modbuspal.main.ModbusPalRuntime;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -48,7 +48,7 @@ public class XMLTools {
 		docBuilder.setEntityResolver(new EntityResolver() {
 			public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 				if (systemId.endsWith("modbuspal.dtd")) {
-					return new InputSource(ModbusPalPane.class.getResourceAsStream("modbuspal.dtd"));
+					return new InputSource(ModbusPalRuntime.class.getResourceAsStream("modbuspal.dtd"));
 				}
 				return null;
 			}

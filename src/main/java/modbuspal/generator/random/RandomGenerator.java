@@ -8,7 +8,6 @@ package modbuspal.generator.random;
 import modbuspal.generator.Generator;
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.swing.JPanel;
 import modbuspal.toolkit.XMLTools;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +18,6 @@ import org.w3c.dom.NodeList;
  * @author nnovic
  */
 public class RandomGenerator extends Generator {
-	private RandomControlPanel panel;
 	double minValue = 0.0;
 	double maxValue = 0.0;
 	boolean relativeMin = false;
@@ -29,8 +27,6 @@ public class RandomGenerator extends Generator {
 	 * Creates a new instance of RandomGenerator
 	 */
 	public RandomGenerator() {
-		setIcon("RandomGenerator.png");
-		panel = new RandomControlPanel(this);
 	}
 
 	@Override
@@ -83,8 +79,6 @@ public class RandomGenerator extends Generator {
 		relativeMax = Boolean.parseBoolean(maxRel);
 
 		// update generator's panel
-		panel.maxTextField.setText(String.valueOf(maxVal));
-		panel.maxRelativeCheckBox.setSelected(relativeMax);
 	}
 
 	private void loadMin(Node node) {
@@ -96,14 +90,5 @@ public class RandomGenerator extends Generator {
 		minValue = Double.parseDouble(minVal);
 		relativeMin = Boolean.parseBoolean(minRel);
 
-		// update generator's panel
-		panel.minTextField.setText(String.valueOf(minValue));
-		panel.minRelativeCheckBox.setSelected(relativeMin);
 	}
-
-	@Override
-	public JPanel getControlPanel() {
-		return panel;
-	}
-
 }

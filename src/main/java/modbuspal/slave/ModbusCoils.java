@@ -270,7 +270,6 @@ public class ModbusCoils extends ModbusRegisters {
 				break;
 			}
 		}
-		notifyTableChanged();
 		return retval;
 	}
 

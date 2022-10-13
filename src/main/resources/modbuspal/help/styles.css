@@ -10,80 +10,73 @@
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
-
 body {
-    font-family: sans-serif;
-    background-color: white;
-    color : black;
+	font-family: sans-serif;
+	background-color: white;
+	color: black;
 }
 
 h1 {
-    text-align:center;
-    margin-bottom: 1em;
+	text-align: center;
+	margin-bottom: 1em;
 }
 
 h2 {
-    margin-top : 1em;
-    clear:both;
+	margin-top: 1em;
+	clear: both;
 }
 
 h3 {
-    margin-top : 1em;
-    clear:both;
+	margin-top: 1em;
+	clear: both;
 }
 
 q {
-    color:blue;
-    font-style: italic;
-
+	color: blue;
+	font-style: italic;
 }
 /*------------------------------------------------------------------------------
  * IMAGES
  *----------------------------------------------------------------------------*/
-
 img {
-    color:red;
+	color: red;
 }
 
 img.img-stand-alone {
-    display:block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:1em;
-    margin-bottom: 1em;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 img.img-wrap-around {
-    display:inline;
-    float:left;
-    margin-right:1em;
-    margin-bottom:1em;
+	display: inline;
+	float: left;
+	margin-right: 1em;
+	margin-bottom: 1em;
 }
-
 
 /*------------------------------------------------------------------------------
  * TABLE
  *----------------------------------------------------------------------------*/
-
 table, td, th {
-    border: 1px solid black;
-    border-collapse: collapse;
+	border: 1px solid black;
+	border-collapse: collapse;
 }
 
 td, th {
-    text-align: left;
-    padding : 5px;
+	text-align: left;
+	padding: 5px;
 }
 
 th {
-    background-color: lightblue;
+	background-color: lightblue;
 }
-
 
 /*------------------------------------------------------------------------------
  * DIVs
  *----------------------------------------------------------------------------*/
-
 div.title {
-    border: 1px dashed black;
+	border: 1px dashed black;
 }

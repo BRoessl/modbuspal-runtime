@@ -5,21 +5,15 @@
 
 package modbuspal.recorder;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modbuspal.slave.ModbusSlaveAddress;
 import modbuspal.toolkit.HexaTools;
-import modbuspal.toolkit.XFileChooser;
 
 /**
  * Records incoming and outgoing data

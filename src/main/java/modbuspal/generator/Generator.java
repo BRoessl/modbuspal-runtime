@@ -5,16 +5,8 @@
 
 package modbuspal.generator;
 
-import java.awt.BorderLayout;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import modbuspal.instanciator.Instantiable;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -29,75 +21,16 @@ import org.w3c.dom.NodeList;
  * @author nnovic
  */
 public abstract class Generator implements Instantiable<Generator> {
-	private ImageIcon icon;
 	private double duration = 10;
 	private double initialValue = 0.0;
-	private JPanel controlPanel;
 
 	/**
 	 * Constructor of the Generator class. Creates a generator with default values,
 	 * icon and control panel.
 	 */
 	public Generator() {
-		setIcon("/modbuspal/generator/Generator.png");
-		controlPanel = createControlPanel();
 	}
 
-	private JPanel createControlPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		JLabel defaultLabel = new JLabel("No parameters.");
-		panel.add(defaultLabel, BorderLayout.CENTER);
-		return panel;
-	}
-
-	/**
-	 * Use this mehod to change the icon of the generator. The icon is the image
-	 * that is visible on the left of the generator's control panel.
-	 * 
-	 * @param iconUrl a string describing the path of the icon image file
-	 * @return true if the icon with changed successfully
-	 */
-	public final boolean setIcon(String iconUrl) {
-		URL url = null;
-
-		// try to use class loader
-		url = getClass().getResource(iconUrl);
-		if (url != null) {
-			icon = new ImageIcon(url);
-			return true;
-		}
-
-		// try to create an url
-		try {
-			url = new URL(iconUrl);
-			if (url != null) {
-				icon = new ImageIcon(url);
-				return true;
-			}
-		} catch (MalformedURLException ex) {
-			url = null;
-		}
-
-		// try to use url directly:
-		File file = new File(iconUrl);
-		if (file.exists()) {
-			icon = new ImageIcon(file.getAbsolutePath());
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Get the icon that is associated with this generator. If you have not set an
-	 * icon (using the setIcon method), then the default icon is returned.
-	 * 
-	 * @return icon of the generator.
-	 */
-	public Icon getIcon() {
-		return icon;
-	}
 
 	/**
 	 * Get the duration of the generator. The duration is set in the automation
@@ -119,17 +52,6 @@ public abstract class Generator implements Instantiable<Generator> {
 	 */
 	public double getInitialValue() {
 		return initialValue;
-	}
-
-	/**
-	 * Get the control panel of the generator. The control panel is a graphical
-	 * component that is displayed in the automation editor so that the user can
-	 * edit the parameters of the generator.
-	 * 
-	 * @return the control panel of the generator.
-	 */
-	public JPanel getControlPanel() {
-		return controlPanel;
 	}
 
 	/**
