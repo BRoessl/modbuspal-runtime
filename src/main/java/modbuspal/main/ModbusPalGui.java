@@ -12,6 +12,7 @@
 package modbuspal.main;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 /**
@@ -41,16 +42,11 @@ public class ModbusPalGui {
 	 * @param {String[]} args The command line arguments
 	 */
 	public static void main(String args[]) {
-		String loadFileArgFlag = "-f=";
-
-		if (args.length >= 1) {
-			for (String arg : args) {
-				if (arg.startsWith(loadFileArgFlag)) {
-					initialLoadFilePath = arg.substring(arg.lastIndexOf(loadFileArgFlag) + loadFileArgFlag.length());
-				}
-			}
+		initialLoadFilePath = System.getenv("MODBUSPAL_PROJECT");
+		if (!Paths.get(initialLoadFilePath).toFile().exists()) {
+			System.err.println(String.format("Project File '%s' does not exist", initialLoadFilePath));
+			System.exit(-1);
 		}
-
 		new ModbusPalPane();
 	}
 
