@@ -100,17 +100,12 @@ public class ModbusPalGui {
 	 * @param {String[]} args The command line arguments
 	 */
 	public static void main(String args[]) {
-		String loadFileArgFlag = "-loadFile=";
-		String portNumberArgFlag = "-portNumber=";
+		String loadFileArgFlag = "-f=";
 
 		if (args.length >= 1) {
 			for (String arg : args) {
 				if (arg.startsWith(loadFileArgFlag)) {
 					initialLoadFilePath = arg.substring(arg.lastIndexOf(loadFileArgFlag) + loadFileArgFlag.length());
-				} else if (arg.startsWith(portNumberArgFlag)) {
-					String portNumberString = arg
-							.substring(arg.lastIndexOf(portNumberArgFlag) + portNumberArgFlag.length());
-					initialPortNumber = Integer.valueOf(portNumberString).intValue();
 				} else {
 					displayHelpMessage();
 				}
