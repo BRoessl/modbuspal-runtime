@@ -7,29 +7,17 @@ package modbuspal.slave;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.automation.NullAutomation;
 import modbuspal.instanciator.InstantiableManager;
 import modbuspal.main.AddSlaveUtil;
 import modbuspal.main.ModbusConst;
-import static modbuspal.main.ModbusConst.FC_READ_COILS;
-import static modbuspal.main.ModbusConst.FC_READ_DISCRETE_INPUTS;
-import static modbuspal.main.ModbusConst.FC_READ_HOLDING_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_READ_WRITE_MULTIPLE_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_WRITE_MULTIPLE_COILS;
-import static modbuspal.main.ModbusConst.FC_WRITE_MULTIPLE_REGISTERS;
-import static modbuspal.main.ModbusConst.FC_WRITE_SINGLE_COIL;
-import static modbuspal.main.ModbusConst.FC_WRITE_SINGLE_REGISTER;
 import modbuspal.main.ModbusPalProject;
 import modbuspal.main.ModbusPalXML;
-import static modbuspal.main.ModbusPalXML.XML_SLAVE_ID_ATTRIBUTE;
 import modbuspal.toolkit.InstanceCounter;
 import modbuspal.toolkit.XMLTools;
 import org.w3c.dom.Node;
@@ -404,9 +392,9 @@ public final class ModbusSlave implements ModbusPalXML, ModbusConst {
 				try {
 					loadFunctionInstance(ffactory, fNode);
 				} catch (InstantiationException ex) {
-					Logger.getLogger(ModbusSlave.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				} catch (IllegalAccessException ex) {
-					Logger.getLogger(ModbusSlave.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 			}
 		}

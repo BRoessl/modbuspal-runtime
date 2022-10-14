@@ -16,8 +16,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import modbuspal.slave.*;
@@ -146,7 +144,7 @@ public class AddSlaveUtil {
 								ModbusSlaveAddress msa = new ModbusSlaveAddress(addr, slaveAddress);
 								output.add(msa);
 							} catch (UnknownHostException ex) {
-								Logger.getLogger(AddSlaveUtil.class.getName()).log(Level.SEVERE, null, ex);
+								ex.printStackTrace();
 							}
 						}
 					}

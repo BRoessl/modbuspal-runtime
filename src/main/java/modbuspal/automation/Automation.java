@@ -8,8 +8,6 @@ import modbuspal.generator.Generator;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.generator.GeneratorListener;
 import modbuspal.instanciator.InstantiableManager;
 import modbuspal.toolkit.InstanceCounter;
@@ -310,7 +308,7 @@ public class Automation implements Runnable {
 			try {
 				thread.join((long) (stepDelay * 2000.0));
 			} catch (InterruptedException ex) {
-				Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
 			thread = null;
 		}
@@ -443,7 +441,7 @@ public class Automation implements Runnable {
 						Thread.sleep((long) (stepDelay * 1000.0));
 					}
 				} catch (InterruptedException ex) {
-					Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 				currentTime += stepDelay;
 				// previousValue = currentValue;

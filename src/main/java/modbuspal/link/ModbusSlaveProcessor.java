@@ -5,8 +5,6 @@
 
 package modbuspal.link;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.main.*;
 import modbuspal.main.ModbusConst;
 import static modbuspal.main.ModbusConst.XC_ILLEGAL_FUNCTION;
@@ -96,7 +94,7 @@ public abstract class ModbusSlaveProcessor implements ModbusConst {
 		try {
 			Thread.sleep(slave.getReplyDelay());
 		} catch (InterruptedException ex) {
-			Logger.getLogger(ModbusSlaveProcessor.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 
 		ModbusPalRecorder.recordOutgoing(slaveID, buffer, offset, length);

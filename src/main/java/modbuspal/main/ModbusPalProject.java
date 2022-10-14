@@ -14,8 +14,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import modbuspal.automation.Automation;
 import modbuspal.automation.NullAutomation;
@@ -242,9 +240,9 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 			}
 
 			catch (InstantiationException ex) {
-				Logger.getLogger(ModbusPalRuntime.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			} catch (IllegalAccessException ex) {
-				Logger.getLogger(ModbusPalRuntime.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -937,7 +935,7 @@ public final class ModbusPalProject extends ModbusPalProject2 implements ModbusP
 
 			tempFile.delete();
 		} catch (Exception ex) {
-			Logger.getLogger(ModbusPalProject.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 			return;
 		}
 

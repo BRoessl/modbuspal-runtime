@@ -10,8 +10,6 @@ import java.io.OutputStreamWriter;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.slave.ModbusSlaveAddress;
 import modbuspal.toolkit.HexaTools;
 
@@ -150,7 +148,7 @@ public class ModbusPalRecorder
 				fileWriter.write(open + hexa + close);
 				fileWriter.flush();
 			} catch (IOException ex) {
-				Logger.getLogger(ModbusPalRecorder.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
 		}
 

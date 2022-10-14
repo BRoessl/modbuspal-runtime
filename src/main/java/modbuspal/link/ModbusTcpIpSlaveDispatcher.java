@@ -11,8 +11,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.main.ModbusPalProject;
 import modbuspal.slave.ModbusSlaveAddress;
 import modbuspal.toolkit.ModbusTools;
@@ -82,7 +80,7 @@ public class ModbusTcpIpSlaveDispatcher extends ModbusSlaveProcessor implements 
 			slaveOutput.close();
 			slaveThread = null;
 		} catch (IOException ex) {
-			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 	}
 
@@ -141,13 +139,13 @@ public class ModbusTcpIpSlaveDispatcher extends ModbusSlaveProcessor implements 
 		try {
 			slaveInput.close();
 		} catch (IOException ex) {
-			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 		try {
 			// close output stream before exiting
 			slaveOutput.close();
 		} catch (IOException ex) {
-			Logger.getLogger(ModbusTcpIpSlaveDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 
 		System.out.println("Stop ModubsTcpIpSlaveDispatcher");

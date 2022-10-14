@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.main.ModbusPalProject;
 import modbuspal.master.ModbusMasterRequest;
 import modbuspal.slave.ModbusSlaveAddress;
@@ -62,13 +60,13 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 		try {
 			serverSocket.close();
 		} catch (IOException ex) {
-			Logger.getLogger(ModbusTcpIpLink.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 
 		try {
 			serverThread.join();
 		} catch (InterruptedException ex) {
-			Logger.getLogger(ModbusTcpIpLink.class.getName()).log(Level.SEVERE, null, ex);
+			ex.printStackTrace();
 		}
 		serverThread = null;
 		ModbusTcpIpSlaveDispatcher.stopAll();
@@ -91,7 +89,7 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 				slave.start();
 			} catch (IOException ex) {
 				if (Thread.interrupted() == false) {
-					Logger.getLogger(ModbusTcpIpLink.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 			}
 		}
@@ -100,7 +98,7 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 			try {
 				serverSocket.close();
 			} catch (IOException ex) {
-				Logger.getLogger(ModbusTcpIpLink.class.getName()).log(Level.SEVERE, null, ex);
+				ex.printStackTrace();
 			}
 		}
 		serverSocket = null;
@@ -122,7 +120,7 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 				try {
 					sock.close();
 				} catch (IOException ex) {
-					Logger.getLogger(ModbusTcpIpLink.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 			}
 		}

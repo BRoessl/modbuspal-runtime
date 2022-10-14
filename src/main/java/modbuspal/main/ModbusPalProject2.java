@@ -9,8 +9,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modbuspal.slave.ModbusSlave;
 import modbuspal.slave.ModbusSlaveAddress;
 import modbuspal.toolkit.NetworkTools;
@@ -81,7 +79,7 @@ public abstract class ModbusPalProject2 {
 						}
 					}
 				} catch (SocketException ex) {
-					Logger.getLogger(ModbusPalProject2.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 			}
 		}
@@ -120,7 +118,7 @@ public abstract class ModbusPalProject2 {
 						}
 					}
 				} catch (SocketException ex) {
-					Logger.getLogger(ModbusPalProject2.class.getName()).log(Level.SEVERE, null, ex);
+					ex.printStackTrace();
 				}
 			}
 		}
