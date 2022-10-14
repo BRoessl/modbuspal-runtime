@@ -30,7 +30,7 @@ or you can set MODBUSPAL_PROJECT environment variable as path to your project fi
 
 
 ## Docker
-The included Docker file is a multistage build which build the jar, a slim jre and copies it to a debian-slim image.
+The included Docker file is a multistage build which builds the jar, a slim jre and copies jre+jar to a debian-slim image.
 ### how to build
 `docker build -t modbuspalruntime .`
 ### how to run
