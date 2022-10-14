@@ -7,4 +7,3 @@
  * A collection of classes for productivity
  */
 package modbuspal.toolkit;
-

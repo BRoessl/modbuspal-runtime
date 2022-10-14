@@ -5,22 +5,14 @@
 	<groupId>broessl</groupId>
 	<artifactId>modbuspal-runtime</artifactId>
 	<packaging>jar</packaging>
-	<version>v1.6b</version>
+	<version>0.1</version>
 	<name>modbuspal-runtime</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jfreechart.version>1.0.19</jfreechart.version>
-		<rxtx.version>2.1.7</rxtx.version>
-		<jython.version>2.7.1b3</jython.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>${jfreechart.version}</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -43,7 +35,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>modbuspal.main.ModbusPalGui</mainClass>
+							<mainClass>modbuspal.main.ModbusPalProjectRunner</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -62,14 +54,14 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										modbuspal.main.ModbusPalGui
+										modbuspal.main.ModbusPalProjectRunner
 									</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>modbus-runtime</finalName>
+							<finalName>modbuspal-runtime</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>

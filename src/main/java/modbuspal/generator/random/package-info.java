@@ -7,4 +7,3 @@
  * Defines the random values generator for automations.
  */
 package modbuspal.generator.random;
-

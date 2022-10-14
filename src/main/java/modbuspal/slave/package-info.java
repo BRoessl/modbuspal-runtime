@@ -7,4 +7,3 @@
  * Classes that define a modbus slave and its content (registers, coils,...)
  */
 package modbuspal.slave;
-

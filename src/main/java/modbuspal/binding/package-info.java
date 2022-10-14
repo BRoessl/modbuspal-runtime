@@ -8,4 +8,3 @@
  * with modbus registers/coils.
  */
 package modbuspal.binding;
-

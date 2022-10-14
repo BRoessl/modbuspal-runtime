@@ -8,4 +8,3 @@
  * cutomizable by scripts
  */
 package modbuspal.instanciator;
-

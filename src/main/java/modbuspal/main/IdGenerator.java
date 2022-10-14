@@ -16,74 +16,61 @@ import org.w3c.dom.NodeList;
  *
  * @author nnovic
  */
-class IdGenerator
-{
-    long idCreator = 0;
+class IdGenerator {
+	long idCreator = 0;
 
-    long createID()
-    {
-        long newID = 0;
-        synchronized(this)
-        {
-            newID = (++idCreator);
-        }
-        return newID;
-    }
+	long createID() {
+		long newID = 0;
+		synchronized (this) {
+			newID = (++idCreator);
+		}
+		return newID;
+	}
 
-    void reset()
-    {
-        synchronized(this)
-        {
-            idCreator=0;
-        }
-    }
+	void reset() {
+		synchronized (this) {
+			idCreator = 0;
+		}
+	}
 
-    void save(OutputStream out) throws IOException
-    {
-        StringBuffer idGenTag = new StringBuffer("<idgen ");
-        synchronized(this)
-        {
-            idGenTag.append(" value=\""+ String.valueOf(idCreator) +"\"");
-        }
-        idGenTag.append("/>\r\n");
-        out.write( idGenTag.toString().getBytes() );
-    }
+	void save(OutputStream out) throws IOException {
+		StringBuffer idGenTag = new StringBuffer("<idgen ");
+		synchronized (this) {
+			idGenTag.append(" value=\"" + String.valueOf(idCreator) + "\"");
+		}
+		idGenTag.append("/>\r\n");
+		out.write(idGenTag.toString().getBytes());
+	}
 
-    void load(Document doc)
-    {
-        // get all tags with the name "idgen"
-        NodeList idGenList = doc.getElementsByTagName("idgen");
+	void load(Document doc) {
+		// get all tags with the name "idgen"
+		NodeList idGenList = doc.getElementsByTagName("idgen");
 
-        // scan the list, and get only the highest value. the project file
-        // is supposed to contain only when "idgen" openTag, anyway:
-        long maxID=0;
-        for(int i=0; i<idGenList.getLength(); i++)
-        {
-            Node idGenNode = idGenList.item(i);
+		// scan the list, and get only the highest value. the project file
+		// is supposed to contain only when "idgen" openTag, anyway:
+		long maxID = 0;
+		for (int i = 0; i < idGenList.getLength(); i++) {
+			Node idGenNode = idGenList.item(i);
 
-            // get the attributes of the node:
-            NamedNodeMap attributes = idGenNode.getAttributes();
+			// get the attributes of the node:
+			NamedNodeMap attributes = idGenNode.getAttributes();
 
-            // scan attributes
-            for(int j=0; j<attributes.getLength(); j++)
-            {
-                Node attr = attributes.item(j);
-                if( attr.getNodeName().compareTo("value")==0 )
-                {
-                    long idGenValue = Long.parseLong( attr.getNodeValue() );
-                    if( idGenValue > maxID )
-                    {
-                        maxID = idGenValue;
-                    }
-                }
-            }
-        }
+			// scan attributes
+			for (int j = 0; j < attributes.getLength(); j++) {
+				Node attr = attributes.item(j);
+				if (attr.getNodeName().compareTo("value") == 0) {
+					long idGenValue = Long.parseLong(attr.getNodeValue());
+					if (idGenValue > maxID) {
+						maxID = idGenValue;
+					}
+				}
+			}
+		}
 
-        // load the max value into the id creator:
-        synchronized(this)
-        {
-            idCreator = maxID;
-        }
-    }
+		// load the max value into the id creator:
+		synchronized (this) {
+			idCreator = maxID;
+		}
+	}
 
 }
