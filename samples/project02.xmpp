@@ -3,7 +3,7 @@
 <modbuspal_project>
 <idgen  value="2"/>
 <links selected="TCP/IP" >
-<tcpip port="502" />
+<tcpip port="503" />
 </links>
 <automation name="anyAuto" step="1.0" loop="true" init="0.0">
 <generator class="LinearGenerator" duration="10.0">
