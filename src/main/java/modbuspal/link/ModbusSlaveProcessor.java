@@ -94,6 +94,7 @@ public abstract class ModbusSlaveProcessor implements ModbusConst {
 		try {
 			Thread.sleep(slave.getReplyDelay());
 		} catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
 			ex.printStackTrace();
 		}
 

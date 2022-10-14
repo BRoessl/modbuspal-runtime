@@ -308,6 +308,7 @@ public class Automation implements Runnable {
 			try {
 				thread.join((long) (stepDelay * 2000.0));
 			} catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
 				ex.printStackTrace();
 			}
 			thread = null;
@@ -441,7 +442,9 @@ public class Automation implements Runnable {
 						Thread.sleep((long) (stepDelay * 1000.0));
 					}
 				} catch (InterruptedException ex) {
+	                Thread.currentThread().interrupt();
 					ex.printStackTrace();
+					break;
 				}
 				currentTime += stepDelay;
 				// previousValue = currentValue;

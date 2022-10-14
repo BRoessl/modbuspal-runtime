@@ -93,7 +93,7 @@ public class ModbusTcpIpSlaveDispatcher extends ModbusSlaveProcessor implements 
 		byte[] buffer = new byte[2048];
 
 		try {
-			while (recv != -1) {
+			while (recv != -1 && !Thread.currentThread().isInterrupted()) {
 				// read MBAP header:
 				recv = slaveInput.read(buffer, 0, 7);
 				if (recv == -1) {

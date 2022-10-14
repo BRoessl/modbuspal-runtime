@@ -66,6 +66,7 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 		try {
 			serverThread.join();
 		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
 			ex.printStackTrace();
 		}
 		serverThread = null;
@@ -81,16 +82,14 @@ public class ModbusTcpIpLink extends ModbusSlaveProcessor implements ModbusLink,
 			executeThread = false;
 		}
 
-		while (executeThread == true) {
+		while (executeThread && !Thread.currentThread().isInterrupted()) {
 			// create client socket
 			try {
 				Socket socket = serverSocket.accept();
 				ModbusTcpIpSlaveDispatcher slave = new ModbusTcpIpSlaveDispatcher(modbusPalProject, socket);
 				slave.start();
 			} catch (IOException ex) {
-				if (Thread.interrupted() == false) {
-					ex.printStackTrace();
-				}
+				ex.printStackTrace();
 			}
 		}
 

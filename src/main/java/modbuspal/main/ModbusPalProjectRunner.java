@@ -16,8 +16,12 @@ public class ModbusPalProjectRunner {
 	}
 
 	public static void main(String args[]) {
-		MODBUSPAL_PROJECT = System.getenv("MODBUSPAL_PROJECT");
-		if (MODBUSPAL_PROJECT==null || !Paths.get(MODBUSPAL_PROJECT).toFile().exists()) {
+		if (args.length == 0) {
+			MODBUSPAL_PROJECT = System.getenv("MODBUSPAL_PROJECT");
+		} else {
+			MODBUSPAL_PROJECT = args[0].strip();
+		}
+		if (MODBUSPAL_PROJECT == null || !Paths.get(MODBUSPAL_PROJECT).toFile().exists()) {
 			System.err.println(String.format("Project File '%s' does not exist", MODBUSPAL_PROJECT));
 			System.exit(-1);
 		}
