@@ -36,8 +36,8 @@ The included Docker file is a multistage build which build the jar, a slim jre a
 ### how to run
 you can either run with a included sample project
 
-`docker run -e MODBUSPAL_PROJECT=/projects/project01.xmpp modbuspalruntime`
+`docker run -p502:502 -e MODBUSPAL_PROJECT=/projects/project01.xmpp modbuspalruntime`
 
 or mount your project and refer to it via environment variables
 
-`docker run -v ${path-to-my-projects}:/projects -e MODBUSPAL_PROJECT=/projects/my-project01.xmpp modbuspalruntime`
+`docker run -p502:502 -v ${path-to-my-projects}:/projects -e MODBUSPAL_PROJECT=/projects/my-project01.xmpp modbuspalruntime`
